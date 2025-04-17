@@ -56,24 +56,29 @@
 </head>
 <body>
 
-  <h2>Kesanggupan Pembayaran</h2>
+  <h2>Saya sanggupan untuk:</h2>
 
   <div id="form">
     <div class="item">
-      <span>1. Menepati Amanah</span>
+      <span>1. Menjaga Amanah</span>
       <button class="btn yes" onclick="cek(0, '✅')">✅</button>
       <button class="btn no" onclick="cek(0, '❌')">❌</button>
     </div>
     <div class="item">
-      <span>2. Melakukan pembayaran via transfer</span>
+      <span>2. Melakukan pembayaran tiap bulan via transfer</span>
       <button class="btn yes" onclick="cek(1, '✅')">✅</button>
       <button class="btn no" onclick="cek(1, '❌')">❌</button>
     </div>
     <div class="item">
-      <span>3. Melakukan pembayaran tiap bulan</span>
-      <button class="btn yes" onclick="cek(2, '✅')">✅</button>
-      <button class="btn no" onclick="cek(2, '❌')">❌</button>
-    </div>
+  <span>3. Siap dibuatkan grup WA peserta 3 orang:</span>
+  <ul style="margin-top: 4px; margin-bottom: 8px; padding-left: 20px;">
+    <li>Pemohon</li>
+    <li>Satu orang keluarga terdekat pemohon</li>
+    <li>Admin KSS (Kredit Syariah Sangatta)</li>
+  </ul>
+  <button class="btn yes" onclick="cek(2, '✅')">✅</button>
+  <button class="btn no" onclick="cek(2, '❌')">❌</button>
+  </div>
     <div class="item">
       <span>4. Diingatkan saat jatuh tempo</span>
       <button class="btn yes" onclick="cek(3, '✅')">✅</button>
@@ -96,9 +101,12 @@
   <script>
     const noAdmin = "6282352680715"; // ganti ke 62 ya bro, bukan 08
     const poin = [
-      "1. Menepati Amanah",
-      "2. Melakukan pembayaran via transfer",
-      "3. Melakukan pembayaran tiap bulan",
+      "1. Menjaga Amanah",
+      "2. Melakukan pembayaran tiap bulan via transfer",
+      "3. Siap dibuatkan grup wa peserta 3 orang",
+       "   a. Pemohon"
+       "   b. satu orang keluarga terdekat pemohon"
+       "   c. Admin KSS"
       "4. Diingatkan saat jatuh tempo",
       "5. Menginfokan jika pindah alamat",
       "6. Menginfokan jika ganti no HP"
@@ -111,7 +119,7 @@
     }
 
     function kirimWA() {
-      let text = "*Kesanggupan Konsumen:*\n\n" + hasil.map(x => x || "❓ Belum diisi").join("\n");
+      let text = "*Saya sanggupan untuk:*\n\n" + hasil.map(x => x || "❓ Belum diisi").join("\n");
       let url = `https://wa.me/${noAdmin}?text=${encodeURIComponent(text)}`;
       window.open(url, "_blank");
     }
