@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kesanggupan Pembayaran</title>
+  <title>Kesanggupan</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -98,32 +98,31 @@
 
   <button class="wa-btn" onclick="kirimWA()">Kirim ke WhatsApp Admin</button>
 
-  <script>
-    const noAdmin = "6282352680715"; // ganti ke 62 ya bro, bukan 08
-    const poin = [
-      "1. Menjaga Amanah",
-      "2. Melakukan pembayaran tiap bulan via transfer",
-      "3. Siap dibuatkan grup wa peserta 3 orang",
-       "   a. Pemohon"
-       "   b. satu orang keluarga terdekat pemohon"
-       "   c. Admin KSS"
-      "4. Diingatkan saat jatuh tempo",
-      "5. Menginfokan jika pindah alamat",
-      "6. Menginfokan jika ganti no HP"
-    ];
+<script>
+  const noAdmin = "6282352680715"; // Sudah benar, pakai 62
 
-    let hasil = ["", "", "", "", "", ""];
+  const poin = [
+    "1. Menjaga Amanah",
+    "2. Melakukan pembayaran tiap bulan via transfer",
+    "3. Siap dibuatkan grup WA peserta 3 orang:\n   a. Pemohon\n   b. Keluarga dekat\n   c. Admin KSS",
+    "4. Diingatkan saat jatuh tempo",
+    "5. Menginfokan jika pindah alamat",
+    "6. Menginfokan jika ganti no HP"
+  ];
 
-    function cek(index, tanda) {
-      hasil[index] = `${poin[index]} ${tanda}`;
-    }
+  let hasil = ["", "", "", "", "", ""];
 
-    function kirimWA() {
-      let text = "*Saya sanggupan untuk:*\n\n" + hasil.map(x => x || "❓ Belum diisi").join("\n");
-      let url = `https://wa.me/${noAdmin}?text=${encodeURIComponent(text)}`;
-      window.open(url, "_blank");
-    }
-  </script>
+  function cek(index, tanda) {
+    hasil[index] = `${poin[index]} ${tanda}`;
+  }
+
+  function kirimWA() {
+    let text = "*Saya sanggupan untuk:*\n\n" + hasil.map(x => x || "❓ Belum diisi").join("\n");
+    let url = `https://wa.me/${noAdmin}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  }
+</script>
+
 
 </body>
 </html>
