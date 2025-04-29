@@ -185,7 +185,7 @@
             const hasilDiv = document.getElementById('hasil');
             hasilDiv.innerHTML = 'Loading...';
 
-            fetch(`https://script.google.com/macros/s/AKfycbzrKlantdo-qcTKJGeyBOKqdII5lhhj2mBtpCxn5MKf3ojB34iV9sufbjwKYeY48Gdd/exec?kode=${kode}`)
+            fetch(`https://script.google.com/macros/s/AKfycbyNvORtOjCavIc77RACahA0lu2UdVnHVBj3qC8Ye7zQvqcvVyLAcJHBlgs_9FFli2Vz/exec?kode=${kode}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.konsumen) {
