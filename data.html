@@ -46,75 +46,84 @@
         <div id="hasil"></div>
     </div>
 
-    <script>
-        async function cekData() {
-            const kode = document.getElementById('kode').value.trim();
-            const hasilDiv = document.getElementById('hasil');
-            
-            // Validasi input
-            if (!kode) {
-                hasilDiv.innerHTML = '<div class="error">Harap masukkan kode konsumen</div>';
-                return;
-            }
+<script>
+async function cekData() {
+  const kode = document.getElementById('kode').value.trim();
+  const hasilDiv = document.getElementById('hasil');
+  
+  // Clear previous results
+  hasilDiv.innerHTML = '';
+  
+  // Validate input
+  if (!kode) {
+    hasilDiv.innerHTML = '<div class="error">Harap masukkan kode konsumen</div>';
+    return;
+  }
 
-            // Tampilkan loading
-            hasilDiv.innerHTML = '<div class="loading">Sedang memeriksa data...</div>';
+  // Show loading
+  hasilDiv.innerHTML = '<div class="loading">Memeriksa data...</div>';
 
-            try {
-                // Kirim request ke Google Apps Script
-                const response = await fetch(`https://script.google.com/macros/s/AKfycbxvYjBtRMAXcUHdj6bRVpEMKHQbv-a0H-Q9BK1z53GxzwMbo2S6iOchNNltvC_7LDUf/exec?kode=${encodeURIComponent(kode)}`);
-                
-                // Handle response error
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+  try {
+    // Gunakan CORS proxy untuk GitHub Pages
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = `https://script.google.com/macros/s/AKfycbxvYjBtRMAXcUHdj6bRVpEMKHQbv-a0H-Q9BK1z53GxzwMbo2S6iOchNNltvC_7LDUf/exec?kode=${encodeURIComponent(kode)}`;
+    
+    const response = await fetch(proxyUrl + targetUrl, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
 
-                const data = await response.json();
+    // Handle non-200 responses
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
 
-                // Handle error dari server
-                if (data.error) {
-                    hasilDiv.innerHTML = `<div class="error">${data.error}</div>`;
-                    return;
-                }
+    const data = await response.json();
 
-                // Hitung total pembayaran dan sisa
-                const totalBayar = data.data.cicilan.reduce((total, cicilan) => total + Number(cicilan.nominal), 0);
-                const sisa = Number(data.data.harga) - totalBayar;
+    // Handle custom errors from backend
+    if (data.error) {
+      throw new Error(data.error);
+    }
 
-                // Format tampilan hasil
-                hasilDiv.innerHTML = `
-                    <div class="result">
-                        <h3>${data.data.nama}</h3>
-                        <p><strong>Kode:</strong> ${data.data.kode}</p>
-                        <p><strong>Barang:</strong> ${data.data.barang}</p>
-                        <p><strong>Total Kredit:</strong> Rp ${Number(data.data.harga).toLocaleString('id-ID')}</p>
-                        <p><strong>Total Dibayar:</strong> Rp ${totalBayar.toLocaleString('id-ID')}</p>
-                        <p><strong>Sisa Pembayaran:</strong> Rp ${sisa.toLocaleString('id-ID')}</p>
-                        
-                        ${data.data.cicilan.length > 0 ? `
-                            <h4>Riwayat Pembayaran:</h4>
-                            <ul>
-                                ${data.data.cicilan.map(cicilan => `
-                                    <li>
-                                        <strong>${cicilan.tanggal}:</strong> 
-                                        Rp ${Number(cicilan.nominal).toLocaleString('id-ID')}
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        ` : '<p>Belum ada riwayat pembayaran</p>'}
-                    </div>
-                `;
+    // Format hasil
+    renderHasil(data);
+    
+  } catch (error) {
+    console.error('Fetch error:', error);
+    hasilDiv.innerHTML = `
+      <div class="error">
+        Gagal memuat data: ${error.message}<br>
+        <small>Coba lagi atau hubungi admin</small>
+      </div>
+    `;
+  }
+}
 
-            } catch (error) {
-                console.error('Error:', error);
-                hasilDiv.innerHTML = `
-                    <div class="error">
-                        Terjadi kesalahan saat mengambil data:<br>
-                        <small>${error.message}</small>
-                    </div>
-                `;
-            }
-        }
-    </script>
+function renderHasil(data) {
+  const d = data.data;
+  const totalBayar = d.cicilan.reduce((sum, c) => sum + Number(c.nominal), 0);
+  const sisa = Number(d.harga) - totalBayar;
+  
+  document.getElementById('hasil').innerHTML = `
+    <div class="result">
+      <h3>${d.nama}</h3>
+      <p><strong>Kode:</strong> ${d.kode}</p>
+      <p><strong>Barang:</strong> ${d.barang}</p>
+      <p><strong>Total Kredit:</strong> Rp ${Number(d.harga).toLocaleString('id-ID')}</p>
+      <p><strong>Total Dibayar:</strong> Rp ${totalBayar.toLocaleString('id-ID')}</p>
+      <p><strong>Sisa:</strong> Rp ${sisa.toLocaleString('id-ID')}</p>
+      ${d.cicilan.length ? `
+        <h4>Riwayat Pembayaran:</h4>
+        <ul>
+          ${d.cicilan.map(c => `
+            <li>${c.tanggal}: Rp ${Number(c.nominal).toLocaleString('id-ID')}</li>
+          `).join('')}
+        </ul>
+      ` : '<p>Belum ada riwayat pembayaran</p>'}
+    </div>
+  `;
+}
+</script>
 </body>
 </html>
