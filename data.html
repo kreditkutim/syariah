@@ -60,7 +60,7 @@ async function cekData() {
   try {
     // Gunakan proxy untuk bypass CORS (opsi 1)
     const proxyUrl = 'https://api.allorigins.win/raw?url=';
-    const targetUrl = `https://script.google.com/macros/s/AKfycbykMZx7feoeIr-QOmxuBzpxM67qdPfJNFA50v0TKCth2I7ClvjjdRUOoR_mBUpbs-59/exec?kode=${encodeURIComponent(kode)}`;
+    const targetUrl = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${encodeURIComponent(kode)}`;
     
     const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
     
