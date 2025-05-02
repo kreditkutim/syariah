@@ -34,14 +34,28 @@
         button:hover {
             background-color: #0056b3;
         }
+        #status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Input Data Cicilan</h2>
         <form id="formCicilan">
-            <label for="kode">Kode Konsumen (4 Digit)</label>
-            <input type="text" id="kode" required>
+            <label for="kodeInput">Kode Konsumen (4 Digit)</label>
+            <input type="text" id="kodeInput" maxlength="4" required>
+            <input type="hidden" id="kodeHidden" name="kode8Digit">
 
             <label for="nominal">Nominal Cicilan</label>
             <input type="number" id="nominal" required>
@@ -56,10 +70,21 @@
     </div>
 
     <script>
-        document.getElementById("formCicilan").addEventListener("submit", function (e) {
+        // Autocomplete 4 digit to 8 digit
+        document.getElementById("kodeInput").addEventListener("input", function(e) {
+            const inputKode = e.target.value;
+            if (inputKode.length === 4) {
+                const kode8Digit = inputKode + "0000"; // 4 digit + 0000
+                document.getElementById("kodeHidden").value = kode8Digit;
+                console.log("Kode lengkap: " + kode8Digit);
+            }
+        });
+
+        // Form submission
+        document.getElementById("formCicilan").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            const kode = document.getElementById("kode").value;
+            const kode8Digit = document.getElementById("kodeHidden").value;
             const nominal = document.getElementById("nominal").value;
             const tanggal = document.getElementById("tanggal").value;
 
@@ -67,22 +92,32 @@
 
             fetch(apiUrl, {
                 method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
                 body: new URLSearchParams({
-                    kode: kode,
+                    kode: kode8Digit,
                     nominal: nominal,
                     tanggal: tanggal
                 })
             })
             .then(res => res.json())
             .then(data => {
+                const statusDiv = document.getElementById("status");
+                statusDiv.className = data.status === 'success' ? 'success' : 'error';
+                statusDiv.textContent = data.status === 'success' 
+                    ? `✅ Data berhasil disimpan. Kode lengkap: ${kode8Digit}`
+                    : `❌ Gagal: ${data.message}`;
+                
+                // Reset form if successful
                 if (data.status === 'success') {
-                    document.getElementById("status").textContent = `✅ Data berhasil disimpan. Kode lengkap: ${data.kode}`;
-                } else {
-                    document.getElementById("status").textContent = `❌ Gagal: ${data.message}`;
+                    document.getElementById("formCicilan").reset();
                 }
             })
             .catch(err => {
-                document.getElementById("status").textContent = "❌ Gagal kirim data: " + err.message;
+                const statusDiv = document.getElementById("status");
+                statusDiv.className = 'error';
+                statusDiv.textContent = "❌ Gagal kirim data: " + err.message;
             });
         });
     </script>
