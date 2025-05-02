@@ -229,7 +229,7 @@ function renderData(data) {
       <h3>${data.nama}</h3>
       <p><strong>Kode:</strong> ${data.kode}</p>
       <p><strong>Barang:</strong> ${data.barang}</p>
-      <p><strong>Total Kredit:</strong> Rp ${Number(data.harga).toLocaleString('id-ID')}</p>
+      <p><strong>Harga Barang:</strong> Rp ${Number(data.harga).toLocaleString('id-ID')}</p>
       <p><strong>Total Dibayar:</strong> Rp ${totalBayar.toLocaleString('id-ID')}</p>
       <p><strong>Sisa:</strong> Rp ${sisa.toLocaleString('id-ID')}</p>
       ${data.cicilan.length ? `
