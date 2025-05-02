@@ -1,125 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Cicilan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        input, button {
-            padding: 10px;
-            width: 100%;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+  <title>Input Cicilan</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Input Data Cicilan</h2>
-        <form id="formCicilan">
-            <label for="kodeInput">Kode Konsumen (4 Digit)</label>
-            <input type="text" id="kodeInput" maxlength="4" required>
-            <input type="hidden" id="kodeHidden" name="kode8Digit">
+  <h1>Input Cicilan Baru</h1>
+  <form id="formInput">
+    <input type="text" id="kode" placeholder="Kode 8 digit" required>
+    <input type="number" id="nominal" placeholder="Nominal" required>
+    <input type="date" id="tanggal" required>
+    <button type="submit">Simpan</button>
+  </form>
+  <div id="status"></div>
 
-            <label for="nominal">Nominal Cicilan</label>
-            <input type="number" id="nominal" required>
+  <script>
+    document.getElementById("formInput").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const kode = document.getElementById("kode").value;
+      const nominal = document.getElementById("nominal").value;
+      const tanggal = document.getElementById("tanggal").value;
+      const url = "URL_APPS_SCRIPT";
 
-            <label for="tanggal">Tanggal Pembayaran</label>
-            <input type="date" id="tanggal" required>
-
-            <button type="submit">Kirim Data</button>
-        </form>
-
-        <div id="status"></div>
-    </div>
-
-    <script>
-        // Autocomplete 4 digit to 8 digit
-        document.getElementById("kodeInput").addEventListener("input", function(e) {
-            const inputKode = e.target.value;
-            if (inputKode.length === 4) {
-                const kode8Digit = inputKode + "0000"; // 4 digit + 0000
-                document.getElementById("kodeHidden").value = kode8Digit;
-                console.log("Kode lengkap: " + kode8Digit);
-            }
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kode, nominal, tanggal })
         });
-
-        // Form submission
-        document.getElementById("formCicilan").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const kode8Digit = document.getElementById("kodeHidden").value;
-            const nominal = document.getElementById("nominal").value;
-            const tanggal = document.getElementById("tanggal").value;
-
-            const apiUrl = "https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec";
-
-            fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({
-                    kode: kode8Digit,
-                    nominal: nominal,
-                    tanggal: tanggal
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                const statusDiv = document.getElementById("status");
-                statusDiv.className = data.status === 'success' ? 'success' : 'error';
-                statusDiv.textContent = data.status === 'success' 
-                    ? `✅ Data berhasil disimpan. Kode lengkap: ${kode8Digit}`
-                    : `❌ Gagal: ${data.message}`;
-                
-                // Reset form if successful
-                if (data.status === 'success') {
-                    document.getElementById("formCicilan").reset();
-                }
-            })
-            .catch(err => {
-                const statusDiv = document.getElementById("status");
-                statusDiv.className = 'error';
-                statusDiv.textContent = "❌ Gagal kirim data: " + err.message;
-            });
-        });
-    </script>
+        
+        const data = await response.json();
+        document.getElementById("status").innerHTML = 
+          `<p style="color:green">${data.message}</p>`;
+      } catch (error) {
+        document.getElementById("status").innerHTML = 
+          `<p style="color:red">Error: ${error.message}</p>`;
+      }
+    });
+  </script>
 </body>
 </html>
