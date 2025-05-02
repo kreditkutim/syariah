@@ -57,28 +57,47 @@
         </div>
     </div>
 
-    <script>
-        function getData() {
-            const kode = document.getElementById("kode").value;
-            const apiUrl = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
+<script>
+document.getElementById("lihatBtn").addEventListener("click", function () {
+  const kodeInput = document.getElementById("kodeKonsumen").value;
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        document.getElementById("data-nama").textContent = `Nama: ${data.data.nama}`;
-                        document.getElementById("data-barang").textContent = `Barang: ${data.data.barang}`;
-                        document.getElementById("data-harga").textContent = `Harga: ${data.data.harga}`;
-                        document.getElementById("data-cicilan").textContent = `Cicilan: ${JSON.stringify(data.data.cicilan)}`;
-                        document.getElementById("result").style.display = "block";
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    alert("Terjadi kesalahan: " + error.message);
-                });
+  fetch(`https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kodeInput}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        const konsumen = data.konsumen;
+        const cicilan = data.cicilan;
+
+        // Format info cicilan
+        let cicilanHtml = '';
+        if (cicilan.length > 0) {
+          cicilanHtml = '<ul>';
+          cicilan.forEach(c => {
+            const tgl = new Date(c.tanggal);
+            const tglStr = tgl.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+            cicilanHtml += `<li>Tanggal: ${tglStr}, Nominal: Rp ${Number(c.nominal).toLocaleString('id-ID')}</li>`;
+          });
+          cicilanHtml += '</ul>';
+        } else {
+          cicilanHtml = '<p>Belum ada cicilan masuk.</p>';
         }
-    </script>
+
+        document.getElementById("hasil").innerHTML = `
+          <h3>Data Konsumen:</h3>
+          <p><strong>Nama:</strong> ${konsumen.nama}</p>
+          <p><strong>Barang:</strong> ${konsumen.barang}</p>
+          <p><strong>Harga:</strong> Rp ${Number(konsumen.harga).toLocaleString('id-ID')}</p>
+          <p><strong>Cicilan:</strong><br>${cicilanHtml}</p>
+        `;
+      } else {
+        document.getElementById("hasil").innerHTML = `<p style="color:red;">❌ ${data.message}</p>`;
+      }
+    })
+    .catch(err => {
+      document.getElementById("hasil").innerHTML = `<p style="color:red;">❌ Gagal mengambil data: ${err.message}</p>`;
+    });
+});
+</script>
+
 </body>
 </html>
