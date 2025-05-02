@@ -1,103 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Konsumen</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        input, button {
-            padding: 10px;
-            width: 100%;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .result {
-            padding: 15px;
-            margin-top: 20px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Data Konsumen</title>
+  <style>
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      font-family: sans-serif;
+    }
+    input, button {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      font-size: 16px;
+    }
+    .result {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Masukkan Kode Konsumen (8 Digit)</h2>
-        <input type="text" id="kode" placeholder="Masukkan kode 8 digit...">
-        <button onclick="getData()">Lihat Data</button>
 
-        <div id="result" class="result" style="display:none;">
-            <h4>Data Konsumen:</h4>
-            <p id="data-nama"></p>
-            <p id="data-barang"></p>
-            <p id="data-harga"></p>
-            <p id="data-cicilan"></p>
-        </div>
-    </div>
+<div class="container">
+  <input type="text" id="kodeKonsumen" placeholder="Masukkan kode konsumen (8 digit)" />
+  <button id="lihatBtn">Lihat Data</button>
+  <div id="hasil"></div>
+
+  <div id="result" class="result" style="display:none;">
+    <h4>Data Konsumen:</h4>
+    <p id="data-nama"></p>
+    <p id="data-barang"></p>
+    <p id="data-harga"></p>
+    <p id="data-cicilan"></p>
+  </div>
+</div>
 
 <script>
 document.getElementById("lihatBtn").addEventListener("click", function () {
-  const kodeInput = document.getElementById("kodeKonsumen").value;
+  const kode = document.getElementById("kodeKonsumen").value.trim();
 
-  fetch(`https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kodeInput}`)
+  if (!kode || kode.length !== 8) {
+    alert("Kode harus 8 digit");
+    return;
+  }
+
+  const apiUrl = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
+
+  fetch(apiUrl)
     .then(res => res.json())
     .then(data => {
-      if (data.status === 'success') {
+      if (data.status === "success") {
         const konsumen = data.konsumen;
         const cicilan = data.cicilan;
 
-        // Format info cicilan
-        let cicilanHtml = '';
-        if (cicilan.length > 0) {
-          cicilanHtml = '<ul>';
-          cicilan.forEach(c => {
-            const tgl = new Date(c.tanggal);
-            const tglStr = tgl.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-            cicilanHtml += `<li>Tanggal: ${tglStr}, Nominal: Rp ${Number(c.nominal).toLocaleString('id-ID')}</li>`;
-          });
-          cicilanHtml += '</ul>';
+        document.getElementById("data-nama").textContent = `Nama: ${konsumen.nama}`;
+        document.getElementById("data-barang").textContent = `Barang: ${konsumen.barang}`;
+        document.getElementById("data-harga").textContent = `Harga: ${konsumen.harga}`;
+
+        if (cicilan && cicilan.length > 0) {
+          let list = cicilan.map(c => `• ${c.tanggal} - Rp${Number(c.nominal).toLocaleString('id-ID')}`).join("<br>");
+          document.getElementById("data-cicilan").innerHTML = `Cicilan:<br>${list}`;
         } else {
-          cicilanHtml = '<p>Belum ada cicilan masuk.</p>';
+          document.getElementById("data-cicilan").textContent = `Cicilan: Belum ada pembayaran`;
         }
 
-        document.getElementById("hasil").innerHTML = `
-          <h3>Data Konsumen:</h3>
-          <p><strong>Nama:</strong> ${konsumen.nama}</p>
-          <p><strong>Barang:</strong> ${konsumen.barang}</p>
-          <p><strong>Harga:</strong> Rp ${Number(konsumen.harga).toLocaleString('id-ID')}</p>
-          <p><strong>Cicilan:</strong><br>${cicilanHtml}</p>
-        `;
+        document.getElementById("result").style.display = "block";
+        document.getElementById("hasil").textContent = "";
       } else {
-        document.getElementById("hasil").innerHTML = `<p style="color:red;">❌ ${data.message}</p>`;
+        document.getElementById("hasil").textContent = `❌ ${data.message}`;
+        document.getElementById("result").style.display = "none";
       }
     })
     .catch(err => {
-      document.getElementById("hasil").innerHTML = `<p style="color:red;">❌ Gagal mengambil data: ${err.message}</p>`;
+      document.getElementById("hasil").textContent = "❌ Gagal mengambil data: " + err.message;
+      document.getElementById("result").style.display = "none";
     });
 });
 </script>
-    
+
 </body>
 </html>
