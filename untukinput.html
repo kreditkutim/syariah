@@ -6,25 +6,52 @@
 <body>
   <h1>Input Cicilan Baru</h1>
 <form id="formInput">
-  <input type="text" id="kode" placeholder="Masukkan 4 digit kode" maxlength="4" required>
+  <div>
+    <input type="text" id="kode" placeholder="Masukkan 4 digit angka" maxlength="4">
+    <span>ATAU</span>
+    <button type="button" id="btnGenerate">Generate Kode Acak</button>
+  </div>
   <input type="number" id="nominal" placeholder="Nominal cicilan" required>
   <input type="date" id="tanggal" required>
   <button type="submit">Simpan</button>
 </form>
 
 <script>
+  // Generate kode acak
+  document.getElementById("btnGenerate").addEventListener("click", async () => {
+    const response = await fetch("URL_APPS_SCRIPT", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isAutoGenerate: true, nominal: "", tanggal: "" })
+    });
+    const result = await response.json();
+    if (result.status === "success") {
+      document.getElementById("kode").value = result.kode;
+      alert(`Kode acak: ${result.kode}`);
+    }
+  });
+
+  // Submit form
   document.getElementById("formInput").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const kode4digit = document.getElementById("kode").value;
-    const nominal = document.getElementById("nominal").value;
-    const tanggal = document.getElementById("tanggal").value;
+    const kode = document.getElementById("kode").value;
+
+    // Validasi manual input
+    if (!/^\d{4}$/.test(kode)) {
+      alert("Kode harus 4 digit angka!");
+      return;
+    }
 
     const response = await fetch("URL_APPS_SCRIPT", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kode4digit, nominal, tanggal })
+      body: JSON.stringify({
+        kode4digit: kode,
+        nominal: document.getElementById("nominal").value,
+        tanggal: document.getElementById("tanggal").value,
+        isAutoGenerate: false
+      })
     });
-
     const result = await response.json();
     alert(result.message);
   });
