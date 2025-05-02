@@ -1,117 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Input Cicilan</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #C4C4C4;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
-    h2 {
-      text-align: center;
-      margin-top: 0;
-      font-size: 24px;
-      color: #ff5722;
-    }
-    .container {
-      max-width: 500px;
-      margin: 20px auto;
-      background-color: #fff;
-      padding: 20px;
-      border: 2px solid #aff22;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input {
-      font-size: 18px;
-      width: 95%;
-      padding: 4px;
-      margin-top: 2px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background-color: #f53d2d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #c72324;
-    }
-    #status {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #fff3e0;
-      border-left: 4px solid #ff5722;
-      border-radius: 5px;
-      font-size: 18px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data Cicilan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <h2>Form Input Cicilan</h2>
-  <div class="container">
-    <form id="formCicilan">
-      <label for="kode">Kode Konsumen (4 Digit):</label>
-      <input type="text" id="kode" required maxlength="4">
+    <div class="container">
+        <h2>Input Data Cicilan</h2>
+        <form id="formCicilan">
+            <label for="kode">Kode Konsumen (4 Digit)</label>
+            <input type="text" id="kode" required>
 
-      <label for="nominal">Nominal Bayar:</label>
-      <input type="number" id="nominal" required>
+            <label for="nominal">Nominal Cicilan</label>
+            <input type="number" id="nominal" required>
 
-      <label for="tanggal">Tanggal Bayar:</label>
-      <input type="date" id="tanggal" required>
+            <label for="tanggal">Tanggal Pembayaran</label>
+            <input type="date" id="tanggal" required>
 
-      <button type="submit">Kirim</button>
-    </form>
-    <div id="status"></div>
-  </div>
+            <button type="submit">Kirim Data</button>
+        </form>
 
-  <script>
-    document.getElementById("formCicilan").addEventListener("submit", function (e) {
-      e.preventDefault();
+        <div id="status"></div>
+    </div>
 
-      const kode = document.getElementById("kode").value;
-      const nominal = document.getElementById("nominal").value;
-      const tanggal = document.getElementById("tanggal").value;
+    <script>
+        document.getElementById("formCicilan").addEventListener("submit", function (e) {
+            e.preventDefault();
 
-      const apiUrl = "https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec";
+            const kode = document.getElementById("kode").value;
+            const nominal = document.getElementById("nominal").value;
+            const tanggal = document.getElementById("tanggal").value;
 
-      fetch(apiUrl, {
-        method: "POST",
-        body: new URLSearchParams({
-          kode: kode,
-          nominal: nominal,
-          tanggal: tanggal
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'success') {
-          document.getElementById("status").textContent = `✅ Cicilan berhasil disimpan. Kode lengkap: ${data.kode}`;
-        } else {
-          document.getElementById("status").textContent = `❌ Gagal: ${data.message}`;
-        }
-      })
-      .catch(err => {
-        document.getElementById("status").textContent = "❌ Gagal kirim data: " + err.message;
-      });
-    });
-  </script>
+            const apiUrl = "https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec";
+
+            fetch(apiUrl, {
+                method: "POST",
+                body: new URLSearchParams({
+                    kode: kode,
+                    nominal: nominal,
+                    tanggal: tanggal
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById("status").textContent = `✅ Data berhasil disimpan. Kode lengkap: ${data.kode}`;
+                } else {
+                    document.getElementById("status").textContent = `❌ Gagal: ${data.message}`;
+                }
+            })
+            .catch(err => {
+                document.getElementById("status").textContent = "❌ Gagal kirim data: " + err.message;
+            });
+        });
+    </script>
 </body>
 </html>
