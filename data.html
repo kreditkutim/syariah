@@ -41,46 +41,41 @@
 </div>
 
 <script>
-document.getElementById("lihatBtn").addEventListener("click", function () {
-  const kode = document.getElementById("kodeKonsumen").value.trim();
+  document.getElementById("formCari").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const kode = document.getElementById("kodeInput").value;
+    const statusDiv = document.getElementById("status");
 
-  if (!kode || kode.length !== 8) {
-    alert("Kode harus 8 digit");
-    return;
-  }
-
-  const apiUrl = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
-
-  fetch(apiUrl)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success") {
-        const konsumen = data.konsumen;
-        const cicilan = data.cicilan;
-
-        document.getElementById("data-nama").textContent = `Nama: ${konsumen.nama}`;
-        document.getElementById("data-barang").textContent = `Barang: ${konsumen.barang}`;
-        document.getElementById("data-harga").textContent = `Harga: ${konsumen.harga}`;
-
-        if (cicilan && cicilan.length > 0) {
-          let list = cicilan.map(c => `• ${c.tanggal} - Rp${Number(c.nominal).toLocaleString('id-ID')}`).join("<br>");
-          document.getElementById("data-cicilan").innerHTML = `Cicilan:<br>${list}`;
-        } else {
-          document.getElementById("data-cicilan").textContent = `Cicilan: Belum ada pembayaran`;
-        }
-
-        document.getElementById("result").style.display = "block";
-        document.getElementById("hasil").textContent = "";
+    try {
+      const response = await fetch(
+        `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`
+      );
+      
+      if (!response.ok) throw new Error("Gagal fetch data");
+      
+      const data = await response.json();
+      
+      if (data.status === "error") {
+        statusDiv.innerHTML = `<div class="error">❌ ${data.message}</div>`;
       } else {
-        document.getElementById("hasil").textContent = `❌ ${data.message}`;
-        document.getElementById("result").style.display = "none";
+        statusDiv.innerHTML = `<div class="success">
+          <h3>Data Konsumen</h3>
+          <p>Nama: ${data.data.nama}</p>
+          <p>Barang: ${data.data.barang}</p>
+          <p>Total Cicilan: Rp ${data.data.harga.toLocaleString()}</p>
+          <h4>Riwayat Cicilan:</h4>
+          <ul>
+            ${data.data.cicilan.map(c => `
+              <li>${new Date(c.tanggal).toLocaleDateString("id-ID")}: Rp ${c.nominal.toLocaleString()}</li>
+            `).join("")}
+          </ul>
+        </div>`;
       }
-    })
-    .catch(err => {
-      document.getElementById("hasil").textContent = "❌ Gagal mengambil data: " + err.message;
-      document.getElementById("result").style.display = "none";
-    });
-});
+    } catch (error) {
+      statusDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+      console.error("Error:", error);
+    }
+  });
 </script>
 
 </body>
