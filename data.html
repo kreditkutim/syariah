@@ -1,46 +1,357 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Cek Data Cicilan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Data Cicilan - Kredit Syariah</title>
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2E7D32;
+      --error-color: #D32F2F;
+      --text-color: #333;
+      --light-gray: #f5f5f5;
+      --white: #ffffff;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--light-gray);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex-grow: 1;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+    
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    #hasil {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: var(--light-gray);
+      display: none;
+    }
+    
+    .error-message {
+      color: var(--error-color);
+      padding: 10px;
+      background-color: #FFEBEE;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      display: none;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-color);
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .data-section {
+      margin-bottom: 20px;
+    }
+    
+    .data-section h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+    
+    .data-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .data-label {
+      font-weight: 600;
+      min-width: 150px;
+    }
+    
+    .cicilan-list {
+      list-style-type: none;
+    }
+    
+    .cicilan-item {
+      background-color: var(--white);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .data-row {
+        flex-direction: column;
+      }
+      
+      .data-label {
+        margin-bottom: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Cek Data Cicilan</h1>
-  <form id="formCek">
-    <input type="text" id="kode" placeholder="Masukkan 8 digit kode" required>
-    <button type="submit">Cek</button>
-  </form>
-  <div id="hasil"></div>
+  <header>
+    <h1>Cek Data Cicilan</h1>
+    <p>Masukkan kode 8 digit yang Anda terima via WhatsApp</p>
+  </header>
+  
+  <div class="container">
+    <div class="error-message" id="errorMessage"></div>
+    
+    <form id="formCek">
+      <div class="form-group">
+        <label for="kode">Kode Pelanggan (8 digit):</label>
+        <input type="text" id="kode" placeholder="Contoh: 24051234" required maxlength="8" pattern="\d{8}">
+      </div>
+      
+      <button type="submit">Cek Data Saya</button>
+    </form>
+    
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Memeriksa data...</p>
+    </div>
+    
+    <div id="hasil">
+      <div class="data-section">
+        <h3>Informasi Pelanggan</h3>
+        <div class="data-row">
+          <span class="data-label">Nama:</span>
+          <span id="nama"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Barang:</span>
+          <span id="barang"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Total Harga:</span>
+          <span id="harga"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Total Dibayar:</span>
+          <span id="totalBayar"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Sisa Pembayaran:</span>
+          <span id="sisa"></span>
+        </div>
+      </div>
+      
+      <div class="data-section">
+        <h3>Riwayat Cicilan</h3>
+        <ul class="cicilan-list" id="cicilanList"></ul>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <p>© 2023 Kredit Syariah - Layanan Pelanggan: 0812-3456-7890</p>
+  </footer>
 
   <script>
     document.getElementById("formCek").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const kode = document.getElementById("kode").value;
-      const url = `URL_APPS_SCRIPT?kode=${kode}`;
-
+      
+      // Reset tampilan
+      document.getElementById("errorMessage").style.display = "none";
+      document.getElementById("hasil").style.display = "none";
+      document.getElementById("loading").style.display = "block";
+      
+      const kode = document.getElementById("kode").value.trim();
+      
+      // Validasi kode
+      if (!/^\d{8}$/.test(kode)) {
+        showError("Kode harus terdiri dari 8 digit angka");
+        document.getElementById("loading").style.display = "none";
+        return;
+      }
+      
       try {
-        const response = await fetch(url);
+        // Ganti URL_APPS_SCRIPT dengan URL deployment Anda
+        const url = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
+        
+        
+        // Menggunakan CORS proxy untuk GitHub Pages
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const response = await fetch(proxyUrl + url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         
         if (data.status === "error") {
-          document.getElementById("hasil").innerHTML = `<p style="color:red">${data.message}</p>`;
-        } else {
-          const cicilanList = data.data.cicilan.map(c => 
-            `<li>${c.tanggal}: Rp ${c.nominal.toLocaleString()}</li>`
-          ).join("");
-          
-          document.getElementById("hasil").innerHTML = `
-            <h3>Data Konsumen</h3>
-            <p>Nama: ${data.data.nama}</p>
-            <p>Barang: ${data.data.barang}</p>
-            <p>Total Harga: Rp ${data.data.harga.toLocaleString()}</p>
-            <h4>Riwayat Cicilan:</h4>
-            <ul>${cicilanList}</ul>
-          `;
+          throw new Error(data.message);
         }
+        
+        // Tampilkan data
+        displayData(data.data);
+        
       } catch (error) {
+        showError(error.message);
         console.error("Error:", error);
+      } finally {
+        document.getElementById("loading").style.display = "none";
       }
     });
+    
+    function showError(message) {
+      const errorElement = document.getElementById("errorMessage");
+      errorElement.textContent = message;
+      errorElement.style.display = "block";
+    }
+    
+    function displayData(data) {
+      // Format angka ke Rupiah
+      const formatRupiah = (number) => {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+          minimumFractionDigits: 0
+        }).format(number);
+      };
+      
+      // Isi data pelanggan
+      document.getElementById("nama").textContent = data.nama || "-";
+      document.getElementById("barang").textContent = data.barang || "-";
+      document.getElementById("harga").textContent = data.harga ? formatRupiah(data.harga) : "-";
+      
+      // Hitung total dan sisa pembayaran
+      const totalBayar = data.cicilan.reduce((sum, c) => sum + Number(c.nominal), 0);
+      const sisa = Number(data.harga) - totalBayar;
+      
+      document.getElementById("totalBayar").textContent = formatRupiah(totalBayar);
+      document.getElementById("sisa").textContent = formatRupiah(sisa);
+      
+      // Isi riwayat cicilan
+      const cicilanList = document.getElementById("cicilanList");
+      cicilanList.innerHTML = "";
+      
+      if (data.cicilan && data.cicilan.length > 0) {
+        data.cicilan.forEach(cicilan => {
+          const li = document.createElement("li");
+          li.className = "cicilan-item";
+          li.innerHTML = `
+            <div><strong>Tanggal:</strong> ${cicilan.tanggal || '-'}</div>
+            <div><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal)}</div>
+          `;
+          cicilanList.appendChild(li);
+        });
+      } else {
+        cicilanList.innerHTML = "<li>Belum ada riwayat pembayaran</li>";
+      }
+      
+      // Tampilkan hasil
+      document.getElementById("hasil").style.display = "block";
+    }
   </script>
 </body>
 </html>
