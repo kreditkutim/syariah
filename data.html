@@ -219,6 +219,10 @@
       <div class="data-section">
         <h3>Informasi Pelanggan</h3>
         <div class="data-row">
+          <span class="data-label">Kode Admin:</span>
+          <span id="kodeAdmin"></span>
+        </div>
+        <div class="data-row">
           <span class="data-label">Nama:</span>
           <span id="nama"></span>
         </div>
@@ -227,8 +231,24 @@
           <span id="barang"></span>
         </div>
         <div class="data-row">
-          <span class="data-label">Total Harga:</span>
+          <span class="data-label">Harga:</span>
           <span id="harga"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Cicilan/Bulan:</span>
+          <span id="cicilanPerBulan"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Lama Cicilan:</span>
+          <span id="lamaBulan"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Tanggal Mulai:</span>
+          <span id="tanggalMulai"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Status:</span>
+          <span id="status"></span>
         </div>
         <div class="data-row">
           <span class="data-label">Total Dibayar:</span>
@@ -241,7 +261,7 @@
       </div>
       
       <div class="data-section">
-        <h3>Riwayat Cicilan</h3>
+        <h3>Riwayat Pembayaran</h3>
         <ul class="cicilan-list" id="cicilanList"></ul>
       </div>
     </div>
@@ -270,10 +290,9 @@
       }
       
       try {
-        // Ganti URL_APPS_SCRIPT dengan URL deployment Anda
+        // Ganti dengan URL deployment Apps Script Anda
         const url = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
-        
-        
+                             
         // Menggunakan CORS proxy untuk GitHub Pages
         const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
         const response = await fetch(proxyUrl + url, {
@@ -319,10 +338,24 @@
         }).format(number);
       };
       
+      // Format tanggal
+      const formatTanggal = (tanggal) => {
+        if (!tanggal) return '-';
+        if (tanggal instanceof Date) {
+          return tanggal.toLocaleDateString('id-ID');
+        }
+        return tanggal;
+      };
+      
       // Isi data pelanggan
+      document.getElementById("kodeAdmin").textContent = data.kodeAdmin || "-";
       document.getElementById("nama").textContent = data.nama || "-";
       document.getElementById("barang").textContent = data.barang || "-";
       document.getElementById("harga").textContent = data.harga ? formatRupiah(data.harga) : "-";
+      document.getElementById("cicilanPerBulan").textContent = data.cicilanPerBulan ? formatRupiah(data.cicilanPerBulan) : "-";
+      document.getElementById("lamaBulan").textContent = data.lamaBulan ? `${data.lamaBulan} bulan` : "-";
+      document.getElementById("tanggalMulai").textContent = formatTanggal(data.tanggalMulai);
+      document.getElementById("status").textContent = data.status || "-";
       
       // Hitung total dan sisa pembayaran
       const totalBayar = data.cicilan.reduce((sum, c) => sum + Number(c.nominal), 0);
@@ -331,7 +364,7 @@
       document.getElementById("totalBayar").textContent = formatRupiah(totalBayar);
       document.getElementById("sisa").textContent = formatRupiah(sisa);
       
-      // Isi riwayat cicilan
+      // Isi riwayat cicilan - SESUAIKAN DENGAN STRUKTUR SHEET CICILAN
       const cicilanList = document.getElementById("cicilanList");
       cicilanList.innerHTML = "";
       
@@ -340,8 +373,9 @@
           const li = document.createElement("li");
           li.className = "cicilan-item";
           li.innerHTML = `
-            <div><strong>Tanggal:</strong> ${cicilan.tanggal || '-'}</div>
+            <div><strong>Tanggal Bayar:</strong> ${formatTanggal(cicilan.tanggal)}</div>
             <div><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal)}</div>
+            <div><strong>Kode Admin:</strong> ${cicilan.kodeAdmin || '-'}</div>
           `;
           cicilanList.appendChild(li);
         });
