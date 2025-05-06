@@ -86,10 +86,12 @@
       loadingDiv.style.display = "block";
       
       // Validasi input
-      if (!/^[0-9]{8}$/.test(kode)) {
-        showError("Format kode harus 8 digit angka");
-        return;
-      }
+     if (!/^[A-Za-z0-9]{8}$/.test(kode)) {
+     showError("Format kode harus 8 karakter huruf/angka");
+     loadingDiv.style.display = "none";
+     return;
+   }
+
       
       try {
         // Ganti dengan URL deployment Anda
