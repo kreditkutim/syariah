@@ -153,8 +153,7 @@
           <div class="cicilan-item">
             <p><strong>Tanggal:</strong> ${cicilan.tanggal || '-'}</p>
             <p><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal || 0)}</p>
-            <p><strong>Kode Admin:</strong> ${cicilan.kodeAdmin || '-'}</p>
-          </div>
+           </div>
         `).join('');
       } else {
         riwayatDiv.innerHTML = "<p>Belum ada riwayat pembayaran</p>";
