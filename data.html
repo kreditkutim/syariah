@@ -272,120 +272,70 @@
   </footer>
 
   <script>
-    document.getElementById("formCek").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      
-      // Reset tampilan
-      document.getElementById("errorMessage").style.display = "none";
-      document.getElementById("hasil").style.display = "none";
-      document.getElementById("loading").style.display = "block";
-      
-      const kode = document.getElementById("kode").value.trim();
-      
-      // Validasi kode
-      if (!/^\d{8}$/.test(kode)) {
-        showError("Kode harus terdiri dari 8 digit angka");
-        document.getElementById("loading").style.display = "none";
-        return;
-      }
-      
-      try {
-        // Ganti dengan URL deployment Apps Script Anda
-        const url = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
-                             
-        // Menggunakan CORS proxy untuk GitHub Pages
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const response = await fetch(proxyUrl + url, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.status === "error") {
-          throw new Error(data.message);
-        }
-        
-        // Tampilkan data
-        displayData(data.data);
-        
-      } catch (error) {
-        showError(error.message);
-        console.error("Error:", error);
-      } finally {
-        document.getElementById("loading").style.display = "none";
-      }
-    });
+document.getElementById("formCek").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const kode = document.getElementById("kode").value.trim().toUpperCase();
+  const hasilDiv = document.getElementById("hasil");
+  
+  // Validasi input
+  if (!/^[A-Z0-9]{8}$/.test(kode)) {
+    showError("Format kode: 8 digit huruf/angka (contoh: 2515MN7D)");
+    return;
+  }
+
+  hasilDiv.innerHTML = '<div class="loading">Memeriksa data...</div>';
+
+  try {
+    const response = await fetch(`https://script.google.com/macros/s/AKfycbxvYjBtRMAXcUHdj6bRVpEMKHQbv-a0H-Q9BK1z53GxzwMbo2S6iOchNNltvC_7LDUf/exec?kode=${kode}`);
     
-    function showError(message) {
-      const errorElement = document.getElementById("errorMessage");
-      errorElement.textContent = message;
-      errorElement.style.display = "block";
-    }
+    if (!response.ok) throw new Error("Gagal mengambil data");
     
-    function displayData(data) {
-      // Format angka ke Rupiah
-      const formatRupiah = (number) => {
-        return new Intl.NumberFormat('id-ID', {
-          style: 'currency',
-          currency: 'IDR',
-          minimumFractionDigits: 0
-        }).format(number);
-      };
-      
-      // Format tanggal
-      const formatTanggal = (tanggal) => {
-        if (!tanggal) return '-';
-        if (tanggal instanceof Date) {
-          return tanggal.toLocaleDateString('id-ID');
-        }
-        return tanggal;
-      };
-      
-      // Isi data pelanggan
-      document.getElementById("kodeAdmin").textContent = data.kodeAdmin || "-";
-      document.getElementById("nama").textContent = data.nama || "-";
-      document.getElementById("barang").textContent = data.barang || "-";
-      document.getElementById("harga").textContent = data.harga ? formatRupiah(data.harga) : "-";
-      document.getElementById("cicilanPerBulan").textContent = data.cicilanPerBulan ? formatRupiah(data.cicilanPerBulan) : "-";
-      document.getElementById("lamaBulan").textContent = data.lamaBulan ? `${data.lamaBulan} bulan` : "-";
-      document.getElementById("tanggalMulai").textContent = formatTanggal(data.tanggalMulai);
-      document.getElementById("status").textContent = data.status || "-";
-      
-      // Hitung total dan sisa pembayaran
-      const totalBayar = data.cicilan.reduce((sum, c) => sum + Number(c.nominal), 0);
-      const sisa = Number(data.harga) - totalBayar;
-      
-      document.getElementById("totalBayar").textContent = formatRupiah(totalBayar);
-      document.getElementById("sisa").textContent = formatRupiah(sisa);
-      
-      // Isi riwayat cicilan - SESUAIKAN DENGAN STRUKTUR SHEET CICILAN
-      const cicilanList = document.getElementById("cicilanList");
-      cicilanList.innerHTML = "";
-      
-      if (data.cicilan && data.cicilan.length > 0) {
-        data.cicilan.forEach(cicilan => {
-          const li = document.createElement("li");
-          li.className = "cicilan-item";
-          li.innerHTML = `
-            <div><strong>Tanggal Bayar:</strong> ${formatTanggal(cicilan.tanggal)}</div>
-            <div><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal)}</div>
-            <div><strong>Kode Admin:</strong> ${cicilan.kodeAdmin || '-'}</div>
-          `;
-          cicilanList.appendChild(li);
-        });
-      } else {
-        cicilanList.innerHTML = "<li>Belum ada riwayat pembayaran</li>";
-      }
-      
-      // Tampilkan hasil
-      document.getElementById("hasil").style.display = "block";
+    const data = await response.json();
+    
+    if (data.status !== "success") {
+      throw new Error(data.message || "Data tidak ditemukan");
     }
+
+    // Tampilkan data
+    displayData(data.data);
+    
+  } catch (error) {
+    showError(error.message);
+    console.error("Error:", error);
+  }
+});
+
+function displayData(data) {
+  const formatRupiah = (num) => {
+    return new Intl.NumberFormat('id-ID', { 
+      style: 'currency', 
+      currency: 'IDR' 
+    }).format(num || 0);
+  };
+
+  document.getElementById("hasil").innerHTML = `
+    <div class="result">
+      <h3>Detail Konsumen</h3>
+      <p><strong>Kode:</strong> ${data.kode || '-'}</p>
+      <p><strong>Nama:</strong> ${data.nama || '-'}</p>
+      <p><strong>Barang:</strong> ${data.barang || '-'}</p>
+      <p><strong>Harga:</strong> ${!isNaN(data.harga) ? formatRupiah(Number(data.harga)) : data.harga || '-'}</p>
+      
+      <h4>Riwayat Pembayaran</h4>
+      ${data.cicilan && data.cicilan.length ? `
+        <ul class="cicilan-list">
+          ${data.cicilan.map(c => `
+            <li>
+              <strong>${c.tanggal || 'Tanggal tidak valid'}:</strong>
+              ${!isNaN(c.nominal) ? formatRupiah(Number(c.nominal)) : c.nominal || '0'}
+            </li>
+          `).join('')}
+        </ul>
+      ` : '<p>Belum ada riwayat pembayaran</p>'}
+    </div>
+  `;
+} 
   </script>
 </body>
 </html>
