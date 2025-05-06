@@ -3,339 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cek Data Cicilan - Kredit Syariah</title>
+  <title>Cek Data Cicilan</title>
   <style>
-    :root {
-      --primary-color: #4CAF50;
-      --secondary-color: #2E7D32;
-      --error-color: #D32F2F;
-      --text-color: #333;
-      --light-gray: #f5f5f5;
-      --white: #ffffff;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
     body {
-      background-color: var(--light-gray);
-      color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
-    
-    header {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-      margin-bottom: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-    
-    .container {
+      font-family: Arial, sans-serif;
       max-width: 800px;
-      width: 100%;
       margin: 0 auto;
-      background-color: var(--white);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      flex-grow: 1;
+      padding: 20px;
+      line-height: 1.6;
     }
-    
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
     .form-group {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
-    
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-    
     input {
+      padding: 10px;
       width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
-      transition: border 0.3s;
+      max-width: 300px;
     }
-    
-    input:focus {
-      border-color: var(--primary-color);
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-    }
-    
     button {
-      background-color: var(--primary-color);
+      background: #3498db;
       color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 4px;
+      padding: 10px 20px;
       cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s;
     }
-    
     button:hover {
-      background-color: var(--secondary-color);
+      background: #2980b9;
     }
-    
-    #hasil {
+    #loading {
+      display: none;
+      color: #27ae60;
+    }
+    #error {
+      color: #e74c3c;
+      display: none;
+    }
+    .data-container {
       margin-top: 30px;
-      padding: 20px;
-      border-radius: 8px;
-      background-color: var(--light-gray);
-      display: none;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
     }
-    
-    .error-message {
-      color: var(--error-color);
-      padding: 10px;
-      background-color: #FFEBEE;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      display: none;
-    }
-    
-    .loading {
-      text-align: center;
-      padding: 20px;
-      display: none;
-    }
-    
-    .spinner {
-      border: 4px solid rgba(0,0,0,0.1);
-      border-radius: 50%;
-      border-top: 4px solid var(--primary-color);
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 15px;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .data-section {
-      margin-bottom: 20px;
-    }
-    
-    .data-section h3 {
-      color: var(--primary-color);
-      margin-bottom: 15px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 8px;
-    }
-    
-    .data-row {
-      display: flex;
-      margin-bottom: 10px;
-    }
-    
-    .data-label {
-      font-weight: 600;
-      min-width: 150px;
-    }
-    
-    .cicilan-list {
-      list-style-type: none;
-    }
-    
     .cicilan-item {
-      background-color: var(--white);
-      padding: 12px 15px;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      border-left: 4px solid var(--primary-color);
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      padding: 20px;
-      color: #666;
-      font-size: 14px;
-    }
-    
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-      
-      .data-row {
-        flex-direction: column;
-      }
-      
-      .data-label {
-        margin-bottom: 5px;
-      }
+      padding: 10px;
+      border-bottom: 1px solid #eee;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Cek Data Cicilan</h1>
-    <p>Masukkan kode 8 digit yang Anda terima via WhatsApp</p>
-  </header>
+  <h1>Cek Data Cicilan</h1>
   
-  <div class="container">
-    <div class="error-message" id="errorMessage"></div>
-    
-    <form id="formCek">
-      <div class="form-group">
-        <label for="kode">Kode Pelanggan (8 digit):</label>
-        <input type="text" id="kode" placeholder="Contoh: 24051234" required maxlength="8" pattern="\d{8}">
-      </div>
-      
-      <button type="submit">Cek Data Saya</button>
-    </form>
-    
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <p>Memeriksa data...</p>
-    </div>
-    
-    <div id="hasil">
-      <div class="data-section">
-        <h3>Informasi Pelanggan</h3>
-        <div class="data-row">
-          <span class="data-label">Kode Admin:</span>
-          <span id="kodeAdmin"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Nama:</span>
-          <span id="nama"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Barang:</span>
-          <span id="barang"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Harga:</span>
-          <span id="harga"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Cicilan/Bulan:</span>
-          <span id="cicilanPerBulan"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Lama Cicilan:</span>
-          <span id="lamaBulan"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Tanggal Mulai:</span>
-          <span id="tanggalMulai"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Status:</span>
-          <span id="status"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Total Dibayar:</span>
-          <span id="totalBayar"></span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Sisa Pembayaran:</span>
-          <span id="sisa"></span>
-        </div>
-      </div>
-      
-      <div class="data-section">
-        <h3>Riwayat Pembayaran</h3>
-        <ul class="cicilan-list" id="cicilanList"></ul>
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="kode">Masukkan Kode 8 Digit:</label>
+    <input type="text" id="kode" placeholder="Contoh: 23011188" maxlength="8">
+    <button onclick="cekData()">Cek Data</button>
   </div>
   
-  <footer>
-    <p>© 2023 Kredit Syariah - Layanan Pelanggan: 0812-3456-7890</p>
-  </footer>
+  <div id="loading">Memeriksa data, harap tunggu...</div>
+  <div id="error"></div>
+  
+  <div id="hasil" class="data-container" style="display:none;">
+    <h2>Detail Konsumen</h2>
+    <div id="detailKonsumen"></div>
+    
+    <h2>Riwayat Pembayaran</h2>
+    <div id="riwayatCicilan"></div>
+  </div>
 
   <script>
-document.getElementById("formCek").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  
-  const kode = document.getElementById("kode").value.trim().toUpperCase();
-  const hasilDiv = document.getElementById("hasil");
-  
-  // Validasi input
-  if (!/^[A-Z0-9]{8}$/.test(kode)) {
-    showError("Format kode: 8 digit huruf/angka (contoh: 2515MN7D)");
-    return;
-  }
-
-  hasilDiv.innerHTML = '<div class="loading">Memeriksa data...</div>';
-
-  try {
-    const response = await fetch(`https://script.google.com/macros/s/AKfycbxvYjBtRMAXcUHdj6bRVpEMKHQbv-a0H-Q9BK1z53GxzwMbo2S6iOchNNltvC_7LDUf/exec?kode=${kode}`);
-    
-    if (!response.ok) throw new Error("Gagal mengambil data");
-    
-    const data = await response.json();
-    
-    if (data.status !== "success") {
-      throw new Error(data.message || "Data tidak ditemukan");
-    }
-
-    // Tampilkan data
-    displayData(data.data);
-    
-  } catch (error) {
-    showError(error.message);
-    console.error("Error:", error);
-  }
-});
-
-function displayData(data) {
-  const formatRupiah = (num) => {
-    return new Intl.NumberFormat('id-ID', { 
-      style: 'currency', 
-      currency: 'IDR' 
-    }).format(num || 0);
-  };
-
-  document.getElementById("hasil").innerHTML = `
-    <div class="result">
-      <h3>Detail Konsumen</h3>
-      <p><strong>Kode:</strong> ${data.kode || '-'}</p>
-      <p><strong>Nama:</strong> ${data.nama || '-'}</p>
-      <p><strong>Barang:</strong> ${data.barang || '-'}</p>
-      <p><strong>Harga:</strong> ${!isNaN(data.harga) ? formatRupiah(Number(data.harga)) : data.harga || '-'}</p>
+    async function cekData() {
+      const kode = document.getElementById("kode").value.trim();
+      const errorDiv = document.getElementById("error");
+      const loadingDiv = document.getElementById("loading");
+      const hasilDiv = document.getElementById("hasil");
       
-      <h4>Riwayat Pembayaran</h4>
-      ${data.cicilan && data.cicilan.length ? `
-        <ul class="cicilan-list">
-          ${data.cicilan.map(c => `
-            <li>
-              <strong>${c.tanggal || 'Tanggal tidak valid'}:</strong>
-              ${!isNaN(c.nominal) ? formatRupiah(Number(c.nominal)) : c.nominal || '0'}
-            </li>
-          `).join('')}
-        </ul>
-      ` : '<p>Belum ada riwayat pembayaran</p>'}
-    </div>
-  `;
-} 
+      // Reset tampilan
+      errorDiv.style.display = "none";
+      hasilDiv.style.display = "none";
+      loadingDiv.style.display = "block";
+      
+      // Validasi input
+      if (!/^[0-9]{8}$/.test(kode)) {
+        showError("Format kode harus 8 digit angka");
+        return;
+      }
+      
+      try {
+        // Ganti dengan URL deployment Anda
+        const url = `https://script.google.com/macros/s/AKfycbxvYjBtRMAXcUHdj6bRVpEMKHQbv-a0H-Q9BK1z53GxzwMbo2S6iOchNNltvC_7LDUf/exec?kode=${kode}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data");
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        tampilkanData(data.data);
+        
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        loadingDiv.style.display = "none";
+      }
+    }
+    
+    function showError(message) {
+      const errorDiv = document.getElementById("error");
+      errorDiv.textContent = message;
+      errorDiv.style.display = "block";
+    }
+    
+    function tampilkanData(data) {
+      const formatRupiah = (angka) => {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR'
+        }).format(angka);
+      };
+      
+      // Tampilkan detail konsumen
+      document.getElementById("detailKonsumen").innerHTML = `
+        <p><strong>Kode:</strong> ${data.kode || '-'}</p>
+        <p><strong>Nama:</strong> ${data.nama || '-'}</p>
+        <p><strong>Barang:</strong> ${data.barang || '-'}</p>
+        <p><strong>Harga:</strong> ${data.harga ? formatRupiah(data.harga) : '-'}</p>
+        <p><strong>Cicilan per Bulan:</strong> ${data.cicilanPerBulan ? formatRupiah(data.cicilanPerBulan) : '-'}</p>
+        <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
+        <p><strong>Tanggal Mulai:</strong> ${data.tanggalMulai || '-'}</p>
+        <p><strong>Status:</strong> ${data.status || '-'}</p>
+        <p><strong>Total Dibayar:</strong> ${formatRupiah(data.totalBayar || 0)}</p>
+        <p><strong>Sisa Pembayaran:</strong> ${formatRupiah((data.harga || 0) - (data.totalBayar || 0))}</p>
+      `;
+      
+      // Tampilkan riwayat cicilan
+      const riwayatDiv = document.getElementById("riwayatCicilan");
+      if (data.cicilan && data.cicilan.length > 0) {
+        riwayatDiv.innerHTML = data.cicilan.map(cicilan => `
+          <div class="cicilan-item">
+            <p><strong>Tanggal:</strong> ${cicilan.tanggal || '-'}</p>
+            <p><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal || 0)}</p>
+            <p><strong>Kode Admin:</strong> ${cicilan.kodeAdmin || '-'}</p>
+          </div>
+        `).join('');
+      } else {
+        riwayatDiv.innerHTML = "<p>Belum ada riwayat pembayaran</p>";
+      }
+      
+      document.getElementById("hasil").style.display = "block";
+    }
   </script>
 </body>
 </html>
