@@ -28,7 +28,7 @@
     const kode = urlParams.get('kode');
     
     if (kode) {
-      fetch(`https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec?kode=${kode}`)
+      fetch(`https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec?kode=${kode}`;
         .then(response => response.json())
         .then(data => {
           if (data.status === "success") {
