@@ -1,165 +1,71 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cek Data Cicilan</title>
+  <title>Detail Konsumen</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    input {
-      padding: 10px;
-      width: 100%;
-      max-width: 300px;
-    }
-    button {
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #2980b9;
-    }
-    #loading {
-      display: none;
-      color: #27ae60;
-    }
-    #error {
-      color: #e74c3c;
-      display: none;
-    }
-    .data-container {
-      margin-top: 30px;
-      border-top: 1px solid #eee;
-      padding-top: 20px;
-    }
-    .cicilan-item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
   </style>
 </head>
 <body>
-  <h1>Cek Data Cicilan</h1>
-  
-  <div class="form-group">
-    <label for="kode">Masukkan Kode 8 Digit:</label>
-    <input type="text" id="kode" placeholder="Contoh: 23011188" maxlength="8">
-    <button onclick="cekData()">Cek Data</button>
-  </div>
-  
-  <div id="loading">Memeriksa data, harap tunggu...</div>
-  <div id="error"></div>
-  
-  <div id="hasil" class="data-container" style="display:none;">
-    <h2>Detail Konsumen</h2>
-    <div id="detailKonsumen"></div>
-    
-    <h2>Riwayat Pembayaran</h2>
-    <div id="riwayatCicilan"></div>
-  </div>
+  <h1>Detail Konsumen</h1>
+  <div id="detailKonsumen"></div>
+  <h2>Riwayat Pembayaran</h2>
+  <table id="riwayatPembayaran">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Nominal</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
-    async function cekData() {
-      const kode = document.getElementById("kode").value.trim();
-      const errorDiv = document.getElementById("error");
-      const loadingDiv = document.getElementById("loading");
-      const hasilDiv = document.getElementById("hasil");
-      
-      // Reset tampilan
-      errorDiv.style.display = "none";
-      hasilDiv.style.display = "none";
-      loadingDiv.style.display = "block";
-      
-      // Validasi input
-     if (!/^[A-Za-z0-9]{8}$/.test(kode)) {
-     showError("Format kode harus 8 karakter huruf/angka");
-     loadingDiv.style.display = "none";
-     return;
-   }
-
-      
-      try {
-        // Ganti dengan URL deployment Anda
-        const url = `https://script.google.com/macros/s/AKfycbwVenEfxFzeQyXBAgcPci-03XX1yBYiG4QwZSZFgjELE2QixyvRfmLGq_NPYtQK4kA/exec?kode=${kode}`;
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data");
-        }
-        
-        const data = await response.json();
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        
-        tampilkanData(data.data);
-        
-      } catch (error) {
-        showError(error.message);
-      } finally {
-        loadingDiv.style.display = "none";
-      }
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const kode = urlParams.get('kode');
     
-    function showError(message) {
-      const errorDiv = document.getElementById("error");
-      errorDiv.textContent = message;
-      errorDiv.style.display = "block";
-    }
-    
-    function tampilkanData(data) {
-      const formatRupiah = (angka) => {
-        return new Intl.NumberFormat('id-ID', {
-          style: 'currency',
-          currency: 'IDR'
-        }).format(angka);
-      };
-      
-      // Tampilkan detail konsumen
-      document.getElementById("detailKonsumen").innerHTML = `
-        <p><strong>Kode:</strong> ${data.kode || '-'}</p>
-        <p><strong>Nama:</strong> ${data.nama || '-'}</p>
-        <p><strong>Barang:</strong> ${data.barang || '-'}</p>
-        <p><strong>Harga:</strong> ${data.harga ? formatRupiah(data.harga) : '-'}</p>
-        <p><strong>Cicilan per Bulan:</strong> ${data.cicilanPerBulan ? formatRupiah(data.cicilanPerBulan) : '-'}</p>
-        <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
-        <p><strong>Tanggal Mulai:</strong> ${data.tanggalMulai || '-'}</p>
-        <p><strong>Status:</strong> ${data.status || '-'}</p>
-        <p><strong>Total Dibayar:</strong> ${formatRupiah(data.totalBayar || 0)}</p>
-        <p><strong>Sisa Pembayaran:</strong> ${formatRupiah((data.harga || 0) - (data.totalBayar || 0))}</p>
-      `;
-      
-      // Tampilkan riwayat cicilan
-      const riwayatDiv = document.getElementById("riwayatCicilan");
-      if (data.cicilan && data.cicilan.length > 0) {
-        riwayatDiv.innerHTML = data.cicilan.map(cicilan => `
-          <div class="cicilan-item">
-            <p><strong>Tanggal:</strong> ${cicilan.tanggal || '-'}</p>
-            <p><strong>Nominal:</strong> ${formatRupiah(cicilan.nominal || 0)}</p>
-           </div>
-        `).join('');
-      } else {
-        riwayatDiv.innerHTML = "<p>Belum ada riwayat pembayaran</p>";
-      }
-      
-      document.getElementById("hasil").style.display = "block";
+    if (kode) {
+      fetch(`https://script.google.com/.../exec?kode=${kode}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            // Tampilkan detail konsumen
+            document.getElementById('detailKonsumen').innerHTML = `
+              <p><strong>Kode:</strong> ${data.data.kode}</p>
+              <p><strong>Nama:</strong> ${data.data.nama}</p>
+              <p><strong>Barang:</strong> ${data.data.barang}</p>
+              <p><strong>Harga:</strong> ${data.data.harga}</p>
+              <p><strong>Cicilan per Bulan:</strong> ${data.data.cicilanPerBulan}</p>
+              <p><strong>Lama Cicilan:</strong> ${data.data.lamaBulan} bulan</p>
+              <p><strong>Tanggal Mulai:</strong> ${data.data.tanggalMulai}</p>
+              <p><strong>Status:</strong> ${data.data.status}</p>
+              <p><strong>Total Dibayar:</strong> ${data.data.totalBayar}</p>
+              <p><strong>Sisa Pembayaran:</strong> ${data.data.sisaPembayaran}</p>
+            `;
+            
+            // Tampilkan riwayat pembayaran
+            const tbody = document.querySelector('#riwayatPembayaran tbody');
+            data.data.cicilan.forEach(item => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${item.tanggal}</td>
+                <td>${item.nominal}</td>
+              `;
+              tbody.appendChild(row);
+            });
+          } else {
+            alert(data.error || 'Terjadi kesalahan');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Gagal mengambil data');
+        });
+    } else {
+      alert('Parameter kode tidak ditemukan');
     }
   </script>
 </body>
