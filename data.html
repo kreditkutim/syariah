@@ -128,6 +128,15 @@
         }).format(angka);
       };
 
+      function cekStatus(harga, totalBayar) {
+      if (totalBayar >= harga) {
+        return 'LUNAS';
+        } else {
+        return 'BELUM LUNAS';
+        }
+      }
+
+      
       const toNumber = (val) => {
         if (!val) return 0;
         return Number(val.toString().replace(/[^0-9]/g, ""));
@@ -146,7 +155,7 @@
         <p><strong>Cicilan per Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : '-'}</p>
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
         <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
-        <p><strong>Status:</strong> ${data.status || '-'}</p>
+        <p><strong>Status:</strong> ${cekStatus((data.harga || 0), (data.totalBayar || 0))}</p>
         <p><strong>Total Dibayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : '-'}</p>
         <p><strong>Sisa Pembayaran:</strong> ${sisaBayar ? formatRupiah(sisaBayar) : '-'}</p>
       `;
