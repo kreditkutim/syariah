@@ -145,12 +145,28 @@
         <p><strong>Harga:</strong> ${harga ? formatRupiah(harga) : '-'}</p>
         <p><strong>Cicilan per Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : '-'}</p>
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
-        <p><strong>Tanggal Mulai:</strong> ${data.tanggalMulai || '-'}</p>
+        <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
         <p><strong>Status:</strong> ${data.status || '-'}</p>
         <p><strong>Total Dibayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : '-'}</p>
         <p><strong>Sisa Pembayaran:</strong> ${sisaBayar ? formatRupiah(sisaBayar) : '-'}</p>
       `;
+function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
+  if (!tanggalMulai || !lamaBulan) return '-';
+  
+  // Pecah tanggal mulai (format dd/mm/yyyy)
+  const parts = tanggalMulai.split('/');
+  if (parts.length !== 3) return '-';
 
+  const month = parseInt(parts[1], 10) - 1; // 0-based index
+  const year = parseInt(parts[2], 10);
+
+  const mulaiDate = new Date(year, month, 1);
+  mulaiDate.setMonth(mulaiDate.getMonth() + parseInt(lamaBulan, 10));
+
+  const options = { month: 'long', year: 'numeric' };
+  return mulaiDate.toLocaleDateString('id-ID', options); // Contoh output: Juli 2025
+}
+      
       const riwayatDiv = document.getElementById("riwayatCicilan");
       if (data.cicilan && data.cicilan.length > 0) {
         riwayatDiv.innerHTML = data.cicilan.map(cicilan => {
