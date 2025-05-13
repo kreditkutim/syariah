@@ -128,12 +128,14 @@
         }).format(angka);
       };
 
-      function cekStatus(hargaStr, totalBayarStr) {
-      const harga = toNumber(hargaStr);
-      const totalBayar = toNumber(totalBayarStr);
-
-      return totalBayar >= harga ? 'LUNAS' : 'BELUM LUNAS';
+      function cekStatus(harga, totalBayar) {
+      if (totalBayar >= harga) {
+        return 'LUNAS';
+        } else {
+        return 'BELUM LUNAS';
+        }
       }
+
       
       const toNumber = (val) => {
         if (!val) return 0;
@@ -149,13 +151,11 @@
         <p><strong>Kode:</strong> ${data.kode || '-'}</p>
         <p><strong>Nama:</strong> ${data.nama || '-'}</p>
         <p><strong>Barang:</strong> ${data.barang || '-'}</p>
-
-        <p><strong>Harga:</strong> ${formatRupiah(harga)}</p>
-        <p><strong>Cicilan per Bulan:</strong> ${formatRupiah(cicilanPerBulan)}</p>
-            
+        <p><strong>Harga:</strong> ${harga ? formatRupiah(harga) : '-'}</p>
+        <p><strong>Cicilan per Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : '-'}</p>
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
         <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
-        <p><strong>Status:</strong> ${cekStatus(data.harga, data.totalBayar)}</p>
+        <p><strong>Status:</strong> ${cekStatus((data.harga || 0), (data.totalBayar || 0))}</p>
         <p><strong>Total Dibayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : '-'}</p>
         <p><strong>Sisa Pembayaran:</strong> ${sisaBayar ? formatRupiah(sisaBayar) : '-'}</p>
       `;
