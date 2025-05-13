@@ -150,9 +150,9 @@
         <p><strong>Nama:</strong> ${data.nama || '-'}</p>
         <p><strong>Barang:</strong> ${data.barang || '-'}</p>
 
-        <p><strong>Harga:</strong> ${formatRupiah(data.harga)}</p>
-        <p><strong>Cicilan per Bulan:</strong> ${formatRupiah(data.cicilanPerBulan)}</p>
-        <p><strong>Modal:</strong> ${formatRupiah(data.modal)}</p>
+        <p><strong>Harga:</strong> ${formatRupiah(harga)}</p>
+        <p><strong>Cicilan per Bulan:</strong> ${formatRupiah(cicilanPerBulan)}</p>
+        <p><strong>Modal:</strong> ${formatRupiah(modal)}</p>
         
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
         <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
