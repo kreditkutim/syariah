@@ -152,8 +152,7 @@
 
         <p><strong>Harga:</strong> ${formatRupiah(harga)}</p>
         <p><strong>Cicilan per Bulan:</strong> ${formatRupiah(cicilanPerBulan)}</p>
-        <p><strong>Modal:</strong> ${formatRupiah(modal)}</p>
-        
+            
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
         <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
         <p><strong>Status:</strong> ${cekStatus(data.harga, data.totalBayar)}</p>
