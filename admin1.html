@@ -59,6 +59,11 @@
   <div class="summary" id="totalKeuntungan">Total Keuntungan: Rp 0</div>
 
   <script>
+    function formatRupiah(angka) {
+  if (!angka || isNaN(angka)) return 'Rp 0';
+  return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
  let allData = [];
 
 async function loadData() {
@@ -116,7 +121,7 @@ function filterByBulan() {
 
   alert(`Terdapat ${filtered.length} pengajuan kredit pada bulan ${bulan}-${tahun}`);
 }
-
+loadData();
   </script>
 </body>
 </html>
