@@ -149,8 +149,11 @@
         <p><strong>Kode:</strong> ${data.kode || '-'}</p>
         <p><strong>Nama:</strong> ${data.nama || '-'}</p>
         <p><strong>Barang:</strong> ${data.barang || '-'}</p>
-        <p><strong>Harga:</strong> ${harga ? formatRupiah(harga) : '-'}</p>
-        <p><strong>Cicilan per Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : '-'}</p>
+
+        <p><strong>Harga:</strong> ${formatRupiah(data.harga)}</p>
+        <p><strong>Cicilan per Bulan:</strong> ${formatRupiah(data.cicilanPerBulan)}</p>
+        <p><strong>Modal:</strong> ${formatRupiah(data.modal)}</p>
+        
         <p><strong>Lama Cicilan:</strong> ${data.lamaBulan || '-'} bulan</p>
         <p><strong>Cicilan Terakhir:</strong> ${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</p>
         <p><strong>Status:</strong> ${cekStatus(data.harga, data.totalBayar)}</p>
