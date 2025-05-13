@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Panel Admin Kredit Syariah</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f8f8f8; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #eee; }
+    input { padding: 6px; margin-right: 10px; }
+    .summary { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h2>Halaman Admin - Data Kredit Konsumen</h2>
+
+  <label>Cari Nama: <input type="text" id="searchInput" placeholder="Masukkan nama atau kode konsumen..."></label>
+
+  <table id="dataTabel">
+    <thead>
+      <tr>
+        <th>Kode</th>
+        <th>Nama</th>
+        <th>Barang</th>
+        <th>Harga</th>
+        <th>Modal</th>
+        <th>Cicilan/Bulan</th>
+        <th>Lama</th>
+        <th>Tanggal Mulai</th>
+        <th>Status</th>
+        <th>Total Bayar</th>
+        <th>Keuntungan</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="summary" id="totalKeuntungan">Total Keuntungan: Rp 0</div>
+
+  <script>
+    async function loadData() {
+      const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec'); // ganti dengan URL kamu
+      const json = await res.json();
+      const data = json.data;
+
+      const tbody = document.querySelector('#dataTabel tbody');
+      tbody.innerHTML = '';
+
+      let totalKeuntungan = 0;
+
+      data.forEach(item => {
+        const keuntungan = item.keuntungan ? parseInt(item.keuntungan.replace(/[^\d]/g, '')) : 0;
+        totalKeuntungan += keuntungan;
+
+        const row = `<tr>
+          <td>${item.kode}</td>
+          <td>${item.nama}</td>
+          <td>${item.barang}</td>
+          <td>${item.harga}</td>
+          <td>${formatRupiah(item.modal)}</td>
+          <td>${item.cicilanPerBulan}</td>
+          <td>${item.lamaBulan}</td>
+          <td>${item.tanggalMulai}</td>
+          <td>${item.status}</td>
+          <td>${item.totalBayar}</td>
+          <td>${formatRupiah(keuntungan)}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      document.getElementById("totalKeuntungan").innerText = "Total Keuntungan: " + formatRupiah(totalKeuntungan);
+    }
+
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const rows = document.querySelectorAll("#dataTabel tbody tr");
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? "" : "none";
+      });
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
 
