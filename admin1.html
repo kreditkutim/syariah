@@ -16,7 +16,8 @@
 
   <h2>Halaman Admin - Data Kredit Konsumen</h2>
 
-  <label>Cari Nama: <input type="text" id="searchInput" placeholder="Masukkan nama atau kode konsumen..."></label>
+  <input type="text" id="searchInput" placeholder="Cari nama atau kode...">
+
 
   <table id="dataTabel">
     <thead>
@@ -87,6 +88,8 @@
     });
 
     loadData();
+document.getElementById("searchInput").addEventListener("input", filterData);
+
   </script>
 </body>
 </html>
