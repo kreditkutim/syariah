@@ -58,73 +58,76 @@
 
   <div class="summary" id="totalKeuntungan">Total Keuntungan: Rp 0</div>
 
-  <script>
-    function formatRupiah(angka) {
-  if (!angka || isNaN(angka)) return 'Rp 0';
-  return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
+<script>
+  let allData = [];
 
-  window.onload = function () {
-
-async function loadData() {
-  const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
-  const json = await res.json();
-  allData = Array.isArray(json.data) ? json.data : [json.data];
-  tampilkanData(allData);
-}
-
-function tampilkanData(data) {
-  const tbody = document.querySelector('#dataTabel tbody');
-  tbody.innerHTML = '';
-
-  let totalKeuntungan = 0;
-
-  data.forEach(item => {
-    const keuntungan = item.keuntungan ? parseInt(item.keuntungan.replace(/[^\d]/g, '')) : 0;
-    totalKeuntungan += keuntungan;
-
-    const row = `<tr>
-      <td>${item.kode}</td>
-      <td>${item.nama}</td>
-      <td>${item.barang}</td>
-      <td>${item.harga}</td>
-      <td>${formatRupiah(item.modal)}</td>
-      <td>${item.cicilanPerBulan}</td>
-      <td>${item.lamaBulan}</td>
-      <td>${item.tanggalMulai}</td>
-      <td>${item.status}</td>
-      <td>${item.totalBayar}</td>
-      <td>${formatRupiah(keuntungan)}</td>
-    </tr>`;
-    tbody.innerHTML += row;
-  });
-
-  document.getElementById("totalKeuntungan").innerText = "Total Keuntungan: " + formatRupiah(totalKeuntungan);
-}
-function filterByBulan() {
-  const bulan = document.getElementById("bulanSelect").value.padStart(2, '0');
-  const tahun = document.getElementById("tahunInput").value.toString().padStart(4, '0');
-
-  if (!bulan || !tahun) {
-    tampilkanData(allData);
-    return;
+  function formatRupiah(angka) {
+    if (!angka || isNaN(angka)) return 'Rp 0';
+    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 
-  const filtered = allData.filter(item => {
-    if (!item.tanggalMulai) return false;
-    const parts = item.tanggalMulai.split('/');
-    const bulanItem = parts[1]?.padStart(2, '0');
-    const tahunItem = parts[2]?.padStart(4, '0');
-    return bulanItem === bulan && tahunItem === tahun;
-  });
+  window.onload = function () {
+    async function loadData() {
+      const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
+      const json = await res.json();
+      allData = Array.isArray(json.data) ? json.data : [json.data];
+      tampilkanData(allData);
+    }
 
-  tampilkanData(filtered);
-  alert(`Terdapat ${filtered.length} pengajuan kredit pada bulan ${bulan}-${tahun}`);
-}
+    function tampilkanData(data) {
+      const tbody = document.querySelector('#dataTabel tbody');
+      tbody.innerHTML = '';
+
+      let totalKeuntungan = 0;
+
+      data.forEach(item => {
+        const keuntungan = item.keuntungan ? parseInt(item.keuntungan.replace(/[^\d]/g, '')) : 0;
+        totalKeuntungan += keuntungan;
+
+        const row = `<tr>
+          <td>${item.kode}</td>
+          <td>${item.nama}</td>
+          <td>${item.barang}</td>
+          <td>${item.harga}</td>
+          <td>${formatRupiah(item.modal)}</td>
+          <td>${item.cicilanPerBulan}</td>
+          <td>${item.lamaBulan}</td>
+          <td>${item.tanggalMulai}</td>
+          <td>${item.status}</td>
+          <td>${item.totalBayar}</td>
+          <td>${formatRupiah(keuntungan)}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+
+      document.getElementById("totalKeuntungan").innerText = "Total Keuntungan: " + formatRupiah(totalKeuntungan);
+    }
+
+    function filterByBulan() {
+      const bulan = document.getElementById("bulanSelect").value.padStart(2, '0');
+      const tahun = document.getElementById("tahunInput").value.toString().padStart(4, '0');
+
+      if (!bulan || !tahun) {
+        tampilkanData(allData);
+        return;
+      }
+
+      const filtered = allData.filter(item => {
+        if (!item.tanggalMulai) return false;
+        const parts = item.tanggalMulai.split('/');
+        const bulanItem = parts[1]?.padStart(2, '0');
+        const tahunItem = parts[2]?.padStart(4, '0');
+        return bulanItem === bulan && tahunItem === tahun;
+      });
+
+      tampilkanData(filtered);
+      alert(`Terdapat ${filtered.length} pengajuan kredit pada bulan ${bulan}-${tahun}`);
+    }
 
     loadData();
   };
-  </script>
+</script>
+
 </body>
 </html>
 
