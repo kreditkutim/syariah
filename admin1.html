@@ -64,7 +64,7 @@
   return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
- let allData = [];
+  window.onload = function () {
 
 async function loadData() {
   const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
@@ -102,18 +102,19 @@ function tampilkanData(data) {
   document.getElementById("totalKeuntungan").innerText = "Total Keuntungan: " + formatRupiah(totalKeuntungan);
 }
 function filterByBulan() {
-  const bulan = document.getElementById("bulanSelect").value;
-  const tahun = document.getElementById("tahunInput").value;
-  
+  const bulan = document.getElementById("bulanSelect").value.padStart(2, '0');
+  const tahun = document.getElementById("tahunInput").value.toString().padStart(4, '0');
+
   if (!bulan || !tahun) {
     tampilkanData(allData);
     return;
   }
 
   const filtered = allData.filter(item => {
+    if (!item.tanggalMulai) return false;
     const parts = item.tanggalMulai.split('/');
-    const bulanItem = parts[1];
-    const tahunItem = parts[2];
+    const bulanItem = parts[1]?.padStart(2, '0');
+    const tahunItem = parts[2]?.padStart(4, '0');
     return bulanItem === bulan && tahunItem === tahun;
   });
 
@@ -121,7 +122,8 @@ function filterByBulan() {
   alert(`Terdapat ${filtered.length} pengajuan kredit pada bulan ${bulan}-${tahun}`);
 }
 
-loadData();
+    loadData();
+  };
   </script>
 </body>
 </html>
