@@ -67,12 +67,17 @@
   }
 
   window.onload = function () {
-    async function loadData() {
-      const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
-      const json = await res.json();
-      allData = Array.isArray(json.data) ? json.data : [json.data];
-      tampilkanData(allData);
-    }
+  async function loadData() {
+  const res = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
+  const json = await res.json();
+  
+  // Paksa jadi array meskipun cuma satu data
+  allData = json.data ? [json.data] : [];
+  
+  console.log("ISI allData:", allData); // untuk debugging
+  tampilkanData(allData);
+}
+
 
     function tampilkanData(data) {
       const tbody = document.querySelector('#dataTabel tbody');
