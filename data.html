@@ -129,12 +129,15 @@
       };
 
       function cekStatus(harga, totalBayar) {
-      if (totalBayar >= harga) {
-        return 'LUNAS';
-        } else {
-        return 'BELUM LUNAS';
-        }
-      }
+    const hargaNum = Number(harga);
+    const totalBayarNum = Number(totalBayar);
+  
+    if (totalBayarNum >= hargaNum) {
+      return '<span style="color: green; font-weight: bold;">LUNAS</span>';
+    } else {
+      return '<span style="color: red; font-weight: bold;">BELUM LUNAS</span>';
+    }
+  }
 
       
       const toNumber = (val) => {
