@@ -128,22 +128,17 @@
         }).format(angka);
       };
 
-function cekStatus(harga, totalBayar) {
-  // Hapus titik, ubah string ke angka
-  const hargaNum = parseInt(harga.toString().replace(/\./g, '').trim());
-  const totalBayarNum = parseInt(totalBayar.toString().replace(/\./g, '').trim());
-
-  if (isNaN(hargaNum) || isNaN(totalBayarNum)) {
-    return 'DATA TIDAK VALID';
-  }
-
-  if (totalBayarNum >= hargaNum) {
-    return 'LUNAS';
-  } else {
-    return 'BELUM LUNAS';
-  }
+function toNumber(str) {
+  if (!str) return 0; // Kalau kosong/null/undefined, anggap 0
+  return parseInt(str.toString().replace(/[^\d]/g, '')) || 0;
 }
 
+function cekStatus(harga, totalBayar) {
+  const hargaNum = toNumber(harga);
+  const totalBayarNum = toNumber(totalBayar);
+
+  return totalBayarNum >= hargaNum ? 'LUNAS' : 'BELUM LUNAS';
+}
       
       const toNumber = (val) => {
         if (!val) return 0;
