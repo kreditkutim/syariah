@@ -128,13 +128,21 @@
         }).format(angka);
       };
 
-      function cekStatus(harga, totalBayar) {
-      if (totalBayar >= harga) {
-        return 'LUNAS';
-        } else {
-        return 'BELUM LUNAS';
-        }
-      }
+function cekStatus(harga, totalBayar) {
+  // Hapus titik, ubah string ke angka
+  const hargaNum = parseInt(harga.toString().replace(/\./g, '').trim());
+  const totalBayarNum = parseInt(totalBayar.toString().replace(/\./g, '').trim());
+
+  if (isNaN(hargaNum) || isNaN(totalBayarNum)) {
+    return 'DATA TIDAK VALID';
+  }
+
+  if (totalBayarNum >= hargaNum) {
+    return 'LUNAS';
+  } else {
+    return 'BELUM LUNAS';
+  }
+}
 
       
       const toNumber = (val) => {
