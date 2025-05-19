@@ -237,6 +237,92 @@
 
   // Muat data saat halaman dimuat
   window.onload = loadData;
+
+  // Fungsi untuk memuat data dari Google Apps Script
+async function loadData() {
+  try {
+    const response = await fetch('https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec');
+    
+    if (!response.ok) {
+      throw new Error('Gagal mengambil data');
+    }
+    
+    const json = await response.json();
+    
+    // Pastikan data berupa array
+    allData = Array.isArray(json.data) ? json.data : 
+             json.data ? [json.data] : [];
+    
+    // Normalisasi data
+    allData = allData.map(item => {
+      // Normalisasi format tanggal (dd/mm/yyyy)
+      if (item.tanggalMulai) {
+        // Jika format tanggal menggunakan tanda hubung (/)
+        if (item.tanggalMulai.includes('/')) {
+          const parts = item.tanggalMulai.split('/');
+          // Pastikan format dd/mm/yyyy
+          if (parts.length === 3) {
+            item.tanggalMulai = `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+          }
+        }
+      }
+      
+      return item;
+    });
+    
+    console.log("Data yang telah dinormalisasi:", allData);
+    tampilkanData(allData);
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Terjadi kesalahan saat memuat data: " + error.message);
+  }
+}
+
+// Fungsi untuk filter data berdasarkan bulan dan tahun
+function filterData() {
+  const bulan = document.getElementById("bulanSelect").value;
+  const tahun = document.getElementById("tahunInput").value;
+
+  if (!bulan && !tahun) {
+    tampilkanData(allData);
+    return;
+  }
+
+  const filtered = allData.filter(item => {
+    if (!item.tanggalMulai) return false;
+    
+    try {
+      const parts = item.tanggalMulai.split('/');
+      if (parts.length !== 3) return false;
+      
+      const bulanItem = parts[1];
+      const tahunItem = parts[2];
+      
+      // Jika bulan dan tahun diisi
+      if (bulan && tahun) {
+        return bulanItem === bulan && tahunItem === tahun;
+      }
+      // Jika hanya tahun diisi
+      else if (tahun) {
+        return tahunItem === tahun;
+      }
+      // Jika hanya bulan diisi
+      else {
+        return bulanItem === bulan;
+      }
+    } catch (e) {
+      console.error("Error memproses tanggal:", item.tanggalMulai, e);
+      return false;
+    }
+  });
+
+  console.log("Data setelah filter:", filtered);
+  tampilkanData(filtered);
+  
+  if (filtered.length === 0) {
+    alert("Tidak ada data untuk filter yang dipilih");
+  }
+}
 </script>
 
 </body>
