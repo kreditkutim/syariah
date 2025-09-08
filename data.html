@@ -199,6 +199,13 @@ function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
 
       document.getElementById("hasil").style.display = "block";
     }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/syariah/service-worker.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch(err => console.error("SW failed:", err));
+  }
+    
   </script>
 </body>
 </html>
