@@ -1,7 +1,7 @@
 {
   "name": "Data Syariah",
   "short_name": "Syariah",
-  "start_url": "data.html",
+  "start_url": ".data.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#00897B",
