@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Aplikasi Kredit Kutim Syariah</title>
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS support -->
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <meta name="apple-mobile-web-app-status-bar" content="#2c7da0">
+    <meta name="theme-color" content="#2c7da0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Kredit Kutim">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2c7da0 0%, #1a4c68 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c7da0;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            margin-bottom: 25px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .install-button {
+            background: white;
+            color: #2c7da0;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .install-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .steps {
+            margin-top: 30px;
+            text-align: left;
+            max-width: 500px;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: white;
+            color: #2c7da0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        #installStatus {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        
+        .back-link {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Kredit Kutim Syariah</div>
+        
+        <h1>Install Aplikasi Kredit Kutim Syariah</h1>
+        <p>Dapatkan pengalaman seperti aplikasi native dengan fitur lengkap dan akses cepat dari layar utama HP Anda</p>
+        
+        <button class="install-button" id="installButton">Install Aplikasi</button>
+        
+        <div id="installStatus"></div>
+        
+        <div class="features">
+            <h2>Keuntungan Install Aplikasi:</h2>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div>Akses cepat dari layar utama HP</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div>Loading lebih cepat dengan caching</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📂</div>
+                <div>Bisa bekerja offline</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔔</div>
+                <div>Notifikasi update informasi</div>
+            </div>
+        </div>
+        
+        <div class="steps">
+            <h2>Cara Install:</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>Klik tombol "Install Aplikasi" di atas</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Ikuti petunjuk yang muncul di browser Anda</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>Aplikasi akan tersedia di layar utama HP Anda</div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">← Kembali ke Halaman Utama</a>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+        const installStatus = document.getElementById('installStatus');
+        
+        // Listen for beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            installButton.style.display = 'block';
+            installStatus.textContent = 'Aplikasi siap untuk diinstall!';
+        });
+        
+        installButton.addEventListener('click', () => {
+            if (!deferredPrompt) {
+                installStatus.textContent = 'Browser tidak mendukung install aplikasi. Gunakan Chrome/Edge di Android.';
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    installStatus.innerHTML = '✅ Aplikasi berhasil diinstall!<br>Silakan buka dari layar utama HP Anda.';
+                    installButton.style.display = 'none';
+                } else {
+                    installStatus.textContent = 'Installasi dibatalkan. Anda bisa install nanti dengan kembali ke halaman ini.';
+                }
+                deferredPrompt = null;
+            });
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            installStatus.innerHTML = '✅ Aplikasi berhasil diinstall!<br>Silakan buka dari layar utama HP Anda.';
+            installButton.style.display = 'none';
+            deferredPrompt = null;
+        });
+        
+        // Check if the app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            installStatus.innerHTML = '✅ Aplikasi sudah terinstall.<br>Buka dari layar utama HP Anda.';
+            installButton.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
