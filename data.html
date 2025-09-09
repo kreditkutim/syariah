@@ -3,88 +3,266 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Manifest -->
-<link rel="manifest" href="/syariah/manifest.json">
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
 
-<!-- iOS support -->
-<link rel="apple-touch-icon" href="/syariah/icon-192x192.png">
-<meta name="apple-mobile-web-app-status-bar" content="#2c7da0">
-<meta name="theme-color" content="#2c7da0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Kredit Kutim">
+  <!-- iOS support -->
+  <link rel="apple-touch-icon" href="icon-192x192.png">
+  <meta name="apple-mobile-web-app-status-bar" content="#2c7da0">
+  <meta name="theme-color" content="#2c7da0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kredit Kutim">
 
-<!-- Android theme color -->
-<meta name="theme-color" content="#2c7da0">
+  <!-- Android theme color -->
+  <meta name="theme-color" content="#2c7da0">
 
-  <title>Cek Data Cicilan</title>
+  <title>Cek Data Cicilan - Kredit Kutim Syariah</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
       max-width: 800px;
       margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #2c7da0 0%, #1a4c68 100%);
+      color: white;
       padding: 20px;
-      line-height: 1.6;
-    }
-    h1 {
-      color: #2c3e50;
       text-align: center;
+      position: relative;
     }
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .logo {
+      width: 70px;
+      height: 70px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 14px;
+      color: #2c7da0;
+      text-align: center;
+      padding: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    h1 {
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+    
+    .tagline {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .install-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      display: none;
+    }
+    
+    .content {
+      padding: 25px;
+    }
+    
     .form-group {
       margin-bottom: 20px;
     }
-    input {
-      padding: 10px;
-      width: 100%;
-      max-width: 300px;
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2c3e50;
     }
+    
+    input {
+      padding: 12px 15px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+    
     button {
       background: #3498db;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      transition: background 0.3s;
     }
+    
     button:hover {
       background: #2980b9;
     }
+    
     #loading {
       display: none;
       color: #27ae60;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
     }
+    
     #error {
       color: #e74c3c;
       display: none;
+      background: #ffecec;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
     }
+    
     .data-container {
       margin-top: 30px;
       border-top: 1px solid #eee;
       padding-top: 20px;
     }
+    
+    .data-section {
+      margin-bottom: 25px;
+    }
+    
+    .data-section h2 {
+      color: #2c7da0;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e6e6e6;
+    }
+    
     .cicilan-item {
-      padding: 10px;
+      padding: 15px;
       border-bottom: 1px solid #eee;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .status-lunas {
+      color: green;
+      font-weight: bold;
+    }
+    
+    .status-belum {
+      color: red;
+      font-weight: bold;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 600px) {
+      header {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .install-button {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 10px auto;
+        display: block;
+        width: 180px;
+      }
+      
+      .content {
+        padding: 15px;
+      }
     }
   </style>
 </head>
   
 <body>
-  <h1>Cek Data Cicilan</h1>
-  
-  <div class="form-group">
-    <label for="kode">Masukkan Kode 8 Digit: (Minta ke Admin)</label>
-    <input type="text" id="kode" placeholder="Contoh: 23011188" maxlength="8">
-    <button onclick="cekData()">Cek Data</button>
-  </div>
-  
-  <div id="loading">Memeriksa data, harap tunggu...</div>
-  <div id="error"></div>
-  
-  <div id="hasil" class="data-container" style="display:none;">
-    <h2>Detail Konsumen</h2>
-    <div id="detailKonsumen"></div>
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <div class="logo">Kredit Kutim Syariah</div>
+      </div>
+      <h1>Cek Data Cicilan</h1>
+      <p class="tagline">Aplikasi Pembiayaan Syariah Kabupaten Kutim</p>
+      <button class="install-button" id="installButton">Install Aplikasi</button>
+    </header>
     
-    <h2>Riwayat Pembayaran</h2>
-    <div id="riwayatCicilan"></div>
+    <div class="content">
+      <div class="form-group">
+        <label for="kode">Masukkan Kode 8 Digit: (Minta ke Admin)</label>
+        <input type="text" id="kode" placeholder="Contoh: 23011188" maxlength="8">
+        <button onclick="cekData()">Cek Data</button>
+      </div>
+      
+      <div id="loading">Memeriksa data, harap tunggu...</div>
+      <div id="error"></div>
+      
+      <div id="hasil" class="data-container" style="display:none;">
+        <div class="data-section">
+          <h2>Detail Konsumen</h2>
+          <div id="detailKonsumen"></div>
+        </div>
+        
+        <div class="data-section">
+          <h2>Riwayat Pembayaran</h2>
+          <div id="riwayatCicilan"></div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>© 2023 Kredit Kutim Syariah. All rights reserved.</p>
+      <p>Layanan Pembiayaan Berbasis Syariah</p>
+    </footer>
   </div>
 
   <script>
@@ -143,16 +321,15 @@
       };
 
       function cekStatus(harga, totalBayar) {
-    const hargaNum = Number(harga);
-    const totalBayarNum = Number(totalBayar);
-  
-    if (totalBayarNum >= hargaNum) {
-      return '<span style="color: green; font-weight: bold;">LUNAS</span>';
-    } else {
-      return '<span style="color: red; font-weight: bold;">BELUM LUNAS</span>';
-    }
-  }
-
+        const hargaNum = Number(harga);
+        const totalBayarNum = Number(totalBayar);
+      
+        if (totalBayarNum >= hargaNum) {
+          return '<span class="status-lunas">LUNAS</span>';
+        } else {
+          return '<span class="status-belum">BELUM LUNAS</span>';
+        }
+      }
       
       const toNumber = (val) => {
         if (!val) return 0;
@@ -176,22 +353,23 @@
         <p><strong>Total Dibayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : '-'}</p>
         <p><strong>Sisa Pembayaran:</strong> ${sisaBayar ? formatRupiah(sisaBayar) : '-'}</p>
       `;
-function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
-  if (!tanggalMulai || !lamaBulan) return '-';
-  
-  // Pecah tanggal mulai (format dd/mm/yyyy)
-  const parts = tanggalMulai.split('/');
-  if (parts.length !== 3) return '-';
+      
+      function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
+        if (!tanggalMulai || !lamaBulan) return '-';
+        
+        // Pecah tanggal mulai (format dd/mm/yyyy)
+        const parts = tanggalMulai.split('/');
+        if (parts.length !== 3) return '-';
 
-  const month = parseInt(parts[1], 10) - 1; // 0-based index
-  const year = parseInt(parts[2], 10);
+        const month = parseInt(parts[1], 10) - 1; // 0-based index
+        const year = parseInt(parts[2], 10);
 
-  const mulaiDate = new Date(year, month, 1);
-  mulaiDate.setMonth(mulaiDate.getMonth() + parseInt(lamaBulan, 10));
+        const mulaiDate = new Date(year, month, 1);
+        mulaiDate.setMonth(mulaiDate.getMonth() + parseInt(lamaBulan, 10));
 
-  const options = { month: 'long', year: 'numeric' };
-  return mulaiDate.toLocaleDateString('id-ID', options); // Contoh output: Juli 2025
-}
+        const options = { month: 'long', year: 'numeric' };
+        return mulaiDate.toLocaleDateString('id-ID', options);
+      }
       
       const riwayatDiv = document.getElementById("riwayatCicilan");
       if (data.cicilan && data.cicilan.length > 0) {
@@ -211,66 +389,45 @@ function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
       document.getElementById("hasil").style.display = "block";
     }
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch(err => console.error("SW failed:", err));
-  }
-  </script>
-<script>
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/syariah/service-worker.js')
-        .then(registration => {
-          console.log('SW registered: ', registration);
-        })
-        .catch(registrationError => {
-          console.log('SW registration failed: ', registrationError);
+    // PWA functionality
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      installButton.style.display = 'block';
+      installButton.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
         });
-    });
-  }
-
-  // Listen for beforeinstallprompt event
-  let deferredPrompt;
-  const installButton = document.createElement('button');
-  
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
-    e.preventDefault();
-    // Stash the event so it can be triggered later
-    deferredPrompt = e;
-    
-    // Create and show install button if needed
-    installButton.style.position = 'fixed';
-    installButton.style.bottom = '20px';
-    installButton.style.right = '20px';
-    installButton.style.padding = '10px 15px';
-    installButton.style.background = '#2c7da0';
-    installButton.style.color = 'white';
-    installButton.style.border = 'none';
-    installButton.style.borderRadius = '5px';
-    installButton.style.cursor = 'pointer';
-    installButton.style.zIndex = '1000';
-    installButton.textContent = 'Install App';
-    
-    installButton.addEventListener('click', () => {
-      // Show the install prompt
-      deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        deferredPrompt = null;
       });
     });
     
-    document.body.appendChild(installButton);
-  });
-</script>
-  
+    window.addEventListener('appinstalled', () => {
+      installButton.style.display = 'none';
+      console.log('PWA was installed');
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
