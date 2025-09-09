@@ -3,19 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- iOS support -->
-  <link rel="apple-touch-icon" href="icon-192x192.png">
-  <meta name="apple-mobile-web-app-status-bar" content="#2c7da0">
-  <meta name="theme-color" content="#2c7da0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Kredit Kutim">
-
-  <!-- Android theme color -->
-  <meta name="theme-color" content="#2c7da0">
-
   <title>Cek Data Cicilan - Kredit Kutim Syariah</title>
   <style>
     * {
@@ -47,7 +34,6 @@
       color: white;
       padding: 20px;
       text-align: center;
-      position: relative;
     }
     
     .logo-container {
@@ -81,21 +67,6 @@
     .tagline {
       font-size: 14px;
       opacity: 0.9;
-    }
-    
-    .install-button {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      cursor: pointer;
-      backdrop-filter: blur(5px);
-      display: none;
     }
     
     .content {
@@ -209,15 +180,6 @@
         font-size: 20px;
       }
       
-      .install-button {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin: 10px auto;
-        display: block;
-        width: 180px;
-      }
-      
       .content {
         padding: 15px;
       }
@@ -233,7 +195,6 @@
       </div>
       <h1>Cek Data Cicilan</h1>
       <p class="tagline">Aplikasi Pembiayaan Syariah Kabupaten Kutim</p>
-      <button class="install-button" id="installButton">Install Aplikasi</button>
     </header>
     
     <div class="content">
@@ -387,46 +348,6 @@
       }
 
       document.getElementById("hasil").style.display = "block";
-    }
-
-    // PWA functionality
-    let deferredPrompt;
-    const installButton = document.getElementById('installButton');
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      
-      installButton.style.display = 'block';
-      installButton.addEventListener('click', () => {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          } else {
-            console.log('User dismissed the install prompt');
-          }
-          deferredPrompt = null;
-        });
-      });
-    });
-    
-    window.addEventListener('appinstalled', () => {
-      installButton.style.display = 'none';
-      console.log('PWA was installed');
-    });
-
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(registration => {
-            console.log('SW registered: ', registration);
-          })
-          .catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-          });
-      });
     }
   </script>
 </body>
