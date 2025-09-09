@@ -20,10 +20,10 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/syariah/data.html",
+  "start_url": ".",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "/syariah/",
+  "scope": ".",
   "theme_color": "#2c7da0",
   "orientation": "portrait"
 }
