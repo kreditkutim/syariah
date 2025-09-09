@@ -1,22 +1,29 @@
 {
-  "name": "Data Syariah",
-  "short_name": "Syariah",
-  "start_url": "./data.html",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#00897B",
-  "orientation": "portrait",
+  "short_name": "Kredit Kutim",
+  "name": "Kredit Kutim Syariah",
+  "description": "Aplikasi Pembiayaan Syariah Kabupaten Kutim",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "start_url": "/syariah/data.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/syariah/",
+  "theme_color": "#2c7da0",
+  "orientation": "portrait"
 }
