@@ -1,11 +1,10 @@
 const CACHE_NAME = 'kredit-kutim-v1';
 const urlsToCache = [
-  '/syariah/',
-  '/syariah/data.html',
-  '/syariah/style.css',
-  '/syariah/script.js',
-  '/syariah/icon-192x192.png',
-  '/syariah/icon-512x512.png'
+  '.',                         // Halaman utama
+  'data.html',                 // Halaman data
+  'icon-192x192.png',          // Ikon
+  'icon-512x512.png'           // Ikon
+  // Tambahkan file lain yang digunakan di sini
 ];
 
 // Install service worker
@@ -18,11 +17,19 @@ self.addEventListener('install', event => {
         console.log('Opened cache');
         return cache.addAll(urlsToCache);
       })
+      .catch(error => {
+        console.error('Cache addAll failed:', error);
+      })
   );
 });
 
 // Cache and return requests
 self.addEventListener('fetch', event => {
+  // Abort non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
@@ -30,9 +37,32 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+        
+        // Clone the request because it's a stream that can only be consumed once
+        const fetchRequest = event.request.clone();
+        
+        return fetch(fetchRequest)
+          .then(response => {
+            // Check if we received a valid response
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            
+            // Clone the response because it's a stream that can only be consumed once
+            const responseToCache = response.clone();
+            
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            
+            return response;
+          })
+          .catch(error => {
+            console.error('Fetch failed:', error);
+            // You could return a custom offline page here
+          });
+      })
   );
 });
 
@@ -51,4 +81,6 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  // Immediately claim control of the page
+  return self.clients.claim();
 });
