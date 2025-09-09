@@ -20,10 +20,10 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "data.html",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": ".",
+  "scope": "/",
   "theme_color": "#2c7da0",
   "orientation": "portrait"
 }
