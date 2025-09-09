@@ -1,16 +1,15 @@
-const CACHE_NAME = 'kredit-kutim-v1';
+const CACHE_NAME = 'kredit-kutim-v2';
 const urlsToCache = [
-  '.',                         // Halaman utama
-  'data.html',                 // Halaman data
-  'icon-192x192.png',          // Ikon
-  'icon-512x512.png'           // Ikon
-  // Tambahkan file lain yang digunakan di sini
+  'index.html',
+  'utama.html',
+  'data.html',
+  'icon-192x192.png',
+  'icon-512x512.png'
 ];
 
 // Install service worker
 self.addEventListener('install', event => {
   console.log('Service worker installing...');
-  // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -25,7 +24,6 @@ self.addEventListener('install', event => {
 
 // Cache and return requests
 self.addEventListener('fetch', event => {
-  // Abort non-GET requests
   if (event.request.method !== 'GET') {
     return;
   }
@@ -33,22 +31,18 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
         if (response) {
           return response;
         }
         
-        // Clone the request because it's a stream that can only be consumed once
         const fetchRequest = event.request.clone();
         
         return fetch(fetchRequest)
           .then(response => {
-            // Check if we received a valid response
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
             
-            // Clone the response because it's a stream that can only be consumed once
             const responseToCache = response.clone();
             
             caches.open(CACHE_NAME)
@@ -60,7 +54,6 @@ self.addEventListener('fetch', event => {
           })
           .catch(error => {
             console.error('Fetch failed:', error);
-            // You could return a custom offline page here
           });
       })
   );
@@ -81,6 +74,5 @@ self.addEventListener('activate', event => {
       );
     })
   );
-  // Immediately claim control of the page
   return self.clients.claim();
 });
