@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kesanggupan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #C4C4C4;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .item {
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .item span {
+      flex: 1;
+      margin-right: 10px;
+    }
+    .btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .yes { background-color: #d4edda; color: #155724; }
+    .no { background-color: #f8d7da; color: #721c24; }
+    .wa-btn {
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .wa-btn:hover {
+      background-color: #1ebc59;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Saya sanggupan untuk:</h2>
+
+  <div id="form">
+    <div class="item">
+      <span>1. Menjaga Amanah</span>
+      <button class="btn yes" onclick="cek(0, '✅')">✅</button>
+      <button class="btn no" onclick="cek(0, '❌')">❌</button>
+    </div>
+    <div class="item">
+      <span>2. Melakukan pembayaran tiap bulan via transfer</span>
+      <button class="btn yes" onclick="cek(1, '✅')">✅</button>
+      <button class="btn no" onclick="cek(1, '❌')">❌</button>
+    </div>
+    <div class="item">
+  <span>3. Siap dibuatkan grup WA peserta 3 orang: (Pemohon,1 orang keluarga pemohon dan admin KSS)</span>
+  <button class="btn yes" onclick="cek(2, '✅')">✅</button>
+  <button class="btn no" onclick="cek(2, '❌')">❌</button>
+  </div>
+    <div class="item">
+      <span>4. Diingatkan saat jatuh tempo</span>
+      <button class="btn yes" onclick="cek(3, '✅')">✅</button>
+      <button class="btn no" onclick="cek(3, '❌')">❌</button>
+    </div>
+    <div class="item">
+      <span>5. Menginfokan jika pindah alamat</span>
+      <button class="btn yes" onclick="cek(4, '✅')">✅</button>
+      <button class="btn no" onclick="cek(4, '❌')">❌</button>
+    </div>
+    <div class="item">
+      <span>6. Menginfokan jika ganti no HP</span>
+      <button class="btn yes" onclick="cek(5, '✅')">✅</button>
+      <button class="btn no" onclick="cek(5, '❌')">❌</button>
+    </div>
+  </div>
+
+  <button class="wa-btn" onclick="kirimWA()">Kirim ke WhatsApp Admin</button>
+<textarea id="preview" rows="15" style="width:100%; margin-top: 20px;" readonly></textarea>
+
+<script>
+  const noAdmin = "6282352680715";
+
+  const poin = [
+    "1. Menjaga Amanah",
+    "2. Melakukan pembayaran tiap bulan via transfer",
+    "3. Siap dibuatkan grup WA peserta 3 orang:\n   a. Pemohon\n   b. Keluarga dekat\n   c. Admin KSS",
+    "4. Diingatkan saat jatuh tempo",
+    "5. Menginfokan jika pindah alamat",
+    "6. Menginfokan jika ganti no HP"
+  ];
+
+  let hasil = ["", "", "", "", "", ""];
+
+  function cek(index, tanda) {
+    hasil[index] = `${poin[index]} ${tanda}`;
+    updatePreview();
+  }
+
+  function updatePreview() {
+    let text = "*Saya sanggupan untuk:*\n\n" + hasil.map(x => x || "❓ Belum diisi").join("\n");
+    document.getElementById("preview").value = text;
+  }
+
+  function kirimWA() {
+    let text = document.getElementById("preview").value;
+    if (text.includes("❓")) {
+      alert("Masih ada poin yang belum diisi!");
+      return;
+    }
+    let url = `https://wa.me/${noAdmin}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  }
+</script>
+
+
+
+</body>
+</html>
