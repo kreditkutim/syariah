@@ -3,6 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Manifest dengan versioning -->
+  <link rel="manifest" href="manifest.json?v=2">
+  
+  <!-- iOS support dengan versioning -->
+  <link rel="apple-touch-icon" href="icon-192x192.png?v=2">
+  <meta name="apple-mobile-web-app-status-bar" content="#2c7da0">
+  <meta name="theme-color" content="#2c7da0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Kredit Kutim">
+  
+  <!-- Android theme color -->
+  <meta name="theme-color" content="#2c7da0">
+  
+  <!-- Cache control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
   <title>Cek Data Cicilan - Kredit Kutim Syariah</title>
   <style>
     * {
@@ -349,6 +367,28 @@
 
       document.getElementById("hasil").style.display = "block";
     }
+
+    // Force clear service worker when page loads
+if ('serviceWorker' in navigator) {
+  // Unregister any existing service worker
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+      console.log('Service Worker unregistered for update');
+    }
+  });
+  
+  // Register new service worker
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('service-worker.js?v=2')
+      .then(function(registration) {
+        console.log('SW registered: ', registration);
+      })
+      .catch(function(registrationError) {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
   </script>
 </body>
 </html>
