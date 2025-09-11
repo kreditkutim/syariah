@@ -1,15 +1,18 @@
-const CACHE_NAME = 'kredit-kutim-v2';
+const CACHE_NAME = 'kredit-kutim-v3';
 const urlsToCache = [
   'index.html',
-  'utama.html',
+  'utama.html', 
   'data.html',
   'icon-192x192.png',
-  'icon-512x512.png'
+  'icon-512x512.png',
+  'manifest.json'
 ];
 
 // Install service worker
 self.addEventListener('install', event => {
   console.log('Service worker installing...');
+  self.skipWaiting(); // Force activation immediately
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -22,44 +25,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Cache and return requests
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest)
-          .then(response => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            const responseToCache = response.clone();
-            
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          })
-          .catch(error => {
-            console.error('Fetch failed:', error);
-          });
-      })
-  );
-});
-
-// Update a service worker
+// Activate event - clean old caches
 self.addEventListener('activate', event => {
   console.log('Service worker activating...');
   event.waitUntil(
@@ -74,5 +40,49 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  
+  // Take control of all clients immediately
   return self.clients.claim();
+});
+
+// Fetch event - handle network requests
+self.addEventListener('fetch', event => {
+  // Only handle GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // If found in cache, return it
+        if (response) {
+          return response;
+        }
+        
+        // Otherwise fetch from network
+        return fetch(event.request)
+          .then(response => {
+            // Check if we got a valid response
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            
+            // Clone the response
+            const responseToCache = response.clone();
+            
+            // Add to cache for future requests
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            
+            return response;
+          })
+          .catch(error => {
+            console.error('Fetch failed:', error);
+            // You could return a custom offline page here
+          });
+      })
+  );
 });
