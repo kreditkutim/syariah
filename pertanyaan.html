@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pertanyaan Umum - KSS</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Styling Khusus Accordion agar lebih Modern */
+      .accordion {
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .accordion-header {
+        padding: 18px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        color: var(--biru-gelap);
+        transition: background 0.3s;
+      }
+
+      .accordion-header:hover {
+        background: #f9f9f9;
+      }
+
+      /* Ikon Panah */
+      .accordion-header::after {
+        content: "▼";
+        font-size: 0.8rem;
+        transition: transform 0.3s;
+        color: var(--biru-utama);
+      }
+
+      .accordion.active {
+        border-color: var(--biru-utama);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .accordion.active .accordion-header {
+        background: var(--abu-bg);
+        color: var(--biru-utama);
+      }
+
+      .accordion.active .accordion-header::after {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        background: #fff;
+        color: #555;
+        transition: all 0.3s ease-out;
+        line-height: 1.6;
+      }
+
+      .accordion.active .accordion-content {
+        padding: 20px;
+        max-height: 500px; /* Nilai maksimal agar animasi jalan */
+        border-top: 1px solid #eee;
+      }
+
+      .accordion-content ul {
+        margin-left: 20px;
+        margin-top: 10px;
+      }
+
+      .accordion-content li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="header-title">
+        <h1>Pertanyaan Umum (FAQ)</h1>
+      </div>
+
+      <div class="content">
+        <div class="accordion">
+          <div class="accordion-header">
+            Apakah Kredit Syariah Sangatta (KSS) sesuai Syariah?
+          </div>
+          <div class="accordion-content">
+            <p>
+              Kami mengacu kepada fatwa Dewan Syariah MUI tentang Murabahah.
+            </p>
+            <p>
+              KSS tidak meminjamkan uang, melainkan membeli barang lalu
+              menjualnya secara kredit dengan margin keuntungan yang disepakati.
+            </p>
+            <p>Akad yang digunakan:</p>
+            <ul>
+              <li>
+                <strong>Wa'ad</strong>: Janji beli berdasarkan permintaan
+                pembeli.
+              </li>
+              <li>
+                <strong>Murabahah</strong>: Kesepakatan harga, uang muka, dan
+                cicilan.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            Apa bedanya KSS dengan sistem berbunga?
+          </div>
+          <div class="accordion-content">
+            <ul>
+              <li>Tidak berbasis bunga (Riba).</li>
+              <li>Tidak ada denda keterlambatan (biaya tetap).</li>
+              <li>Persyaratan lebih mudah dan kekeluargaan.</li>
+              <li>Harga jual sudah fixed/tetap sejak awal akad.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">Apa itu Akad Murabahah?</div>
+          <div class="accordion-content">
+            <p>
+              Murabahah adalah transaksi jual beli transparan, di mana penjual
+              menyebutkan harga modal dan margin keuntungan kepada pembeli.
+            </p>
+            <p>
+              Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000 menyatakan bahwa Murabahah
+              adalah menjual barang dengan menyebutkan harga beli dan
+              menambahkan laba yang disepakati.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">Berapa besaran uang muka (DP)?</div>
+          <div class="accordion-content">
+            <p>
+              Kami tidak mewajibkan uang muka secara mutlak. Jika ada DP, maka
+              akan sangat meringankan cicilan bulanan Anda.
+            </p>
+            <p>
+              Namun, untuk barang dengan nilai tinggi tertentu, kami mewajibkan
+              adanya uang muka sesuai kebijakan admin.
+            </p>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">Bagaimana cara cek angsuran saya?</div>
+          <div class="accordion-content">
+            <ol style="margin-left: 20px">
+              <li>Mintalah 8 digit kode pribadi Anda ke Admin KSS.</li>
+              <li>Buka menu <b>Nota</b> pada web ini.</li>
+              <li>Masukkan kode tersebut pada kolom input yang tersedia.</li>
+              <li>
+                Tunggu proses loading sekitar 1 menit, hasil tagihan akan muncul
+                otomatis.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-header">
+            Barang apa saja yang bisa dikredit?
+          </div>
+          <div class="accordion-content">
+            <p>Hampir semua kebutuhan legal seperti:</p>
+            <ul>
+              <li>Elektronik & Gadget (HP, Laptop).</li>
+              <li>Perabotan Rumah Tangga.</li>
+              <li>Alat Pertukangan / Kerja.</li>
+              <li>Barang lainnya dengan harga di atas 1 juta.</li>
+            </ul>
+            <p>
+              <b>Yang tidak dilayani:</b> Pinjaman uang tunai dan perhiasan
+              emas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".accordion-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const parent = header.parentElement;
+
+          // Tutup accordion lain yang sedang terbuka (opsional, biar rapi)
+          document.querySelectorAll(".accordion").forEach((item) => {
+            if (item !== parent) {
+              item.classList.remove("active");
+            }
+          });
+
+          // Toggle accordion yang diklik
+          parent.classList.toggle("active");
+        });
+      });
+    </script>
+  </body>
+</html>

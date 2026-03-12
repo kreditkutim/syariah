@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cek Data - PM Permata Portal</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="header-title">
+        <h1>Cek Data Cicilan</h1>
+      </div>
+
+      <div class="content">
+        <div class="form-group">
+          <label for="kode">Kode 8 Digit (Minta Admin)</label>
+          <input
+            type="text"
+            id="kode"
+            placeholder="Contoh: 23011188"
+            maxlength="8"
+          />
+          <button onclick="cekData()" class="btn-primary">
+            CEK DATA SEKARANG
+          </button>
+        </div>
+
+        <div id="loading" class="status-msg" style="display: none">
+          <div class="spinner"></div>
+          <span>Memeriksa database...</span>
+        </div>
+        <div id="error" class="error-msg"></div>
+
+        <div id="hasil" style="display: none; margin-top: 20px">
+          <div class="data-section">
+            <h2 class="section-title">Detail Konsumen</h2>
+            <div id="detailKonsumen" class="info-box"></div>
+          </div>
+
+          <div class="data-section" style="margin-top: 20px">
+            <h2 class="section-title">Riwayat Pembayaran</h2>
+            <div id="riwayatCicilan"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function cekData() {
+        const kodeInput = document.getElementById("kode");
+        const kode = kodeInput.value.trim();
+        const errorDiv = document.getElementById("error");
+        const loadingDiv = document.getElementById("loading");
+        const hasilDiv = document.getElementById("hasil");
+
+        errorDiv.style.display = "none";
+        hasilDiv.style.display = "none";
+
+        if (!/^[A-Za-z0-9]{8}$/.test(kode)) {
+          showError("Format kode harus 8 karakter huruf/angka");
+          return;
+        }
+
+        loadingDiv.style.display = "block";
+
+        try {
+          const url = `https://script.google.com/macros/s/AKfycbz5VJRylw-dvset6w_JhzVkgUZ1zW5viLtJTKDS7hPSgHuRDBu3vYxqBEHu4cqebfxu/exec?kode=${kode}`;
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Gagal mengambil data");
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          tampilkanData(data.data);
+        } catch (error) {
+          showError(error.message);
+        } finally {
+          loadingDiv.style.display = "none";
+        }
+      }
+
+      function showError(message) {
+        const errorDiv = document.getElementById("error");
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+      }
+
+      function tampilkanData(data) {
+        // 1. Helper: Format Rupiah
+        const formatRupiah = (angka) => {
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(angka);
+        };
+
+        // 2. Helper: Bersihkan Angka
+        const toNumber = (val) => {
+          if (!val) return 0;
+          return Number(val.toString().replace(/[^0-9]/g, ""));
+        };
+
+        // 3. Logika Hitung Tanggal Selesai
+        function hitungCicilanTerakhirBulan(tanggalMulai, lamaBulan) {
+          if (!tanggalMulai || !lamaBulan) return "-";
+          const parts = tanggalMulai.split("/");
+          if (parts.length !== 3) return "-";
+          const day = parseInt(parts[0], 10);
+          const month = parseInt(parts[1], 10) - 1;
+          const year = parseInt(parts[2], 10);
+          const tglSelesai = new Date(year, month, day);
+          tglSelesai.setMonth(tglSelesai.getMonth() + parseInt(lamaBulan, 10));
+          const options = { month: "long", year: "numeric" };
+          return tglSelesai.toLocaleDateString("id-ID", options);
+        }
+
+        const harga = toNumber(data.harga);
+        const cicilanPerBulan = toNumber(data.cicilanPerBulan);
+        const totalBayar = toNumber(data.totalBayar);
+        const sisaBayar = harga - totalBayar;
+        const lunas = totalBayar >= harga && harga > 0;
+
+        // 4. Update Tampilan Detail
+        document.getElementById("detailKonsumen").innerHTML = `
+      <div><strong>Kode:</strong> ${data.kode || "-"}</div>
+      <div><strong>Nama:</strong> ${data.nama || "-"}</div>
+      <div><strong>Barang:</strong> ${data.barang || "-"}</div>
+      <div><strong>Harga:</strong> ${harga ? formatRupiah(harga) : "-"}</div>
+      <div><strong>Cicilan/Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : "-"}</div>
+      <div><strong>Lamanya:</strong> ${data.lamaBulan || "-"} Bulan</div>
+      <div><strong>Estimasi Selesai:</strong> <span style="color: #2980b9; font-weight:bold;">${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</span></div>
+      <div><strong>Total Bayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : "-"}</div>
+      <div><strong>Kekurangan:</strong> <span style="color: #c0392b; font-weight:bold;">${formatRupiah(sisaBayar)}</span></div>
+      <div><strong>Status:</strong> <span style="color: ${lunas ? "green" : "red"}; font-weight: bold;">${lunas ? "LUNAS" : "BELUM LUNAS"}</span></div>
+    `;
+
+        // 5. Update Tabel Riwayat dengan Nomor Urut
+        const riwayatDiv = document.getElementById("riwayatCicilan");
+        if (data.cicilan && data.cicilan.length > 0) {
+          let tabelHtml = `<table>
+            <thead>
+                <tr>
+                    <th style="width: 40px; text-align: center;">No</th>
+                    <th>Tanggal</th>
+                    <th>Nominal</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+          // Perhatikan bagian index ini, Bro
+          data.cicilan.forEach((c, index) => {
+            const nominal = toNumber(c.nominal);
+            tabelHtml += `
+                <tr>
+                    <td style="text-align: center; font-weight: bold;">${index + 1}</td>
+                    <td>${c.tanggal || "-"}</td>
+                    <td>${nominal ? formatRupiah(nominal) : "-"}</td>
+                </tr>`;
+          });
+
+          tabelHtml += `</tbody></table>`;
+          riwayatDiv.innerHTML = tabelHtml;
+        } else {
+          riwayatDiv.innerHTML =
+            "<p style='padding:10px;'>Belum ada riwayat pembayaran</p>";
+        }
+
+        // Munculkan hasil
+        document.getElementById("hasil").style.display = "block";
+      }
+    </script>
+  </body>
+</html>

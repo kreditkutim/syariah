@@ -1,0 +1,342 @@
+/* === 1. GLOBAL RESET & VARIABLES === */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --biru-utama: #2c7da0;
+  --biru-gelap: #1a4c68;
+  --hijau-toska: #1abc9c;
+  --putih: #ffffff;
+  --abu-bg: #f4f7f6;
+  --overlay-gelap: rgba(0, 0, 0, 0.3);
+}
+
+/* === 2. BACKGROUND & LAYOUT UTAMA === */
+html,
+body {
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--biru-utama) 0%,
+    var(--biru-gelap) 100%
+  );
+  background-attachment: fixed;
+  color: #333;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Mencegah layar utama goyang saat navbar di-scroll */
+}
+
+/* === 3. HEADER & NAVIGATION (FIXED SCROLL) === */
+.header-top {
+  background: var(--overlay-gelap);
+  padding: 15px 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.header-top h1 {
+  color: var(--putih) !important;
+  font-size: 1.2rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+}
+
+.navbar {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  gap: 10px;
+
+  /* PENGATURAN GESER UTAMA */
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /* Halus di iPhone */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar::-webkit-scrollbar {
+  display: none; /* Sembunyikan scrollbar */
+}
+
+.navbar button {
+  flex: 0 0 auto !important; /* Tombol tidak boleh mengecil/gepeng */
+  padding: 10px 22px;
+  cursor: pointer;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.navbar button.active {
+  background: var(--putih);
+  color: var(--biru-gelap);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* === 4. CONTENT AREA (IFRAME) === */
+#content-frame {
+  width: 100%;
+  flex-grow: 1;
+  border: none;
+  background-color: transparent;
+}
+
+/* === 5. COMPONENTS (Card & Forms) === */
+.card {
+  background: #fcfbfb;
+  width: 95%;
+  max-width: 700px;
+  margin: 20px auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-title {
+  background: linear-gradient(to right, var(--biru-utama), var(--biru-gelap));
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.content {
+  padding: 25px;
+}
+
+.info-box div {
+  margin-bottom: 12px;
+  display: block;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 5px;
+}
+
+.info-box strong {
+  display: inline-block;
+  width: 140px;
+  color: var(--biru-gelap);
+}
+
+/* Label Putih untuk Hitung.html */
+.info-box label {
+  color: var(--putih);
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(to bottom, var(--biru-utama), var(--biru-gelap));
+  color: white;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* === 6. FOOTER & RESPONSIVE === */
+footer {
+  background: var(--overlay-gelap);
+  padding: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+footer p {
+  color: var(--putih) !important;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+/* ==========================================================
+   STYLE KHUSUS HALAMAN HUKUM & SYARAT (TIMELINE & LIST)
+   ========================================================== */
+
+/* Kontainer Utama List */
+.syarat-list,
+.hukum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+/* Kotak Item (Card Kecil) */
+.syarat-item,
+.hukum-item {
+  background: #fff;
+  padding: 22px;
+  border-radius: 12px;
+  border-left: 5px solid var(--biru-utama);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.syarat-item {
+  flex-direction: row; /* Khusus syarat ada angka di samping */
+  gap: 15px;
+}
+
+.syarat-item:hover,
+.hukum-item:hover {
+  transform: translateY(-3px);
+}
+
+/* Lingkaran Angka di Syarat */
+.syarat-number {
+  background: var(--biru-utama);
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Header di Hukum */
+.hukum-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+.hukum-header h3,
+.syarat-body h3 {
+  color: var(--biru-gelap);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Teks Arab */
+.arabic {
+  font-family: "Amiri", serif, "Times New Roman";
+  font-size: 1.45rem;
+  line-height: 2.5rem;
+  text-align: right;
+  background: #f9fbfd;
+  padding: 18px;
+  margin: 10px 0;
+  border-radius: 8px;
+  color: #222;
+  direction: rtl;
+}
+
+/* Terjemahan & Penjelasan */
+.translation {
+  font-style: italic;
+  color: #444;
+  line-height: 1.6;
+  border-left: 3px solid #ddd;
+  padding-left: 12px;
+  margin: 10px 0;
+}
+
+/* Box Kesimpulan Biru Muda */
+.kesimpulan-box {
+  background: #eef7f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px inset rgba(44, 125, 160, 0.1);
+}
+
+.kesimpulan-box strong {
+  color: var(--biru-gelap);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* List di dalam konten */
+.syarat-body ul,
+.kesimpulan-box ul {
+  margin-left: 20px;
+  color: #555;
+}
+
+.syarat-body li,
+.kesimpulan-box li {
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+/* Referensi / Sumber Hadits */
+.reference {
+  font-size: 0.8rem;
+  color: #999;
+  display: block;
+  text-align: right;
+  margin-top: 5px;
+}
+
+/* Responsif Mobile */
+@media (max-width: 600px) {
+  .syarat-item {
+    flex-direction: column; /* Angka pindah ke atas di HP */
+  }
+  .arabic {
+    font-size: 1.25rem;
+    line-height: 2.2rem;
+  }
+}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kredit Syariah Sangatta</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#2c7da0" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+  </head>
+  <body>
+    <div class="main-wrapper">
+      <div class="header-top">
+        <h1>Kredit Syariah Sangatta</h1>
+      </div>
+
+      <div class="navbar">
+        <button onclick="loadPage('nota.html', this)" class="active">
+          Nota
+        </button>
+        <button onclick="loadPage('hitung.html', this)">Hitung</button>
+        <button onclick="loadPage('cara.html', this)">Cara</button>
+        <button onclick="loadPage('syarat.html', this)">Syarat</button>
+        <button onclick="loadPage('hukum.html', this)">Hukum</button>
+        <button onclick="loadPage('pertanyaan.html', this)">Pertanyaan</button>
+        <button onclick="loadPage('galeri.html', this)">Galeri</button>
+      </div>
+
+      <iframe id="content-frame" src="nota.html"></iframe>
+
+      <footer>
+        <p>© 2023 Kredit Syariah Sangatta - Supported by Widiya</p>
+      </footer>
+    </div>
+
+    <script>
+      function loadPage(page, btn) {
+        // Mengganti isi iframe
+        document.getElementById("content-frame").src = page;
+
+        // Mengatur tombol mana yang terlihat 'active' (warna putih)
+        const buttons = document.querySelectorAll(".navbar button");
+        buttons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      }
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("sw.js")
+            .then((reg) => console.log("Service Worker Terdaftar!"))
+            .catch((err) => console.log("Gagal Daftar SW", err));
+        });
+      }
+    </script>
+  </body>
+</html>

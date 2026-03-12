@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hitung Cicilan - KSS</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="info-box">
+      <h2>Simulasi Cicilan</h2>
+
+      <label for="hargaBarang">Harga Barang:</label>
+      <input
+        type="text"
+        id="hargaBarang"
+        class="format-rupiah"
+        placeholder="Contoh: 10.000.000"
+      />
+
+      <label for="lamaCicilan">Lama Cicilan (bulan):</label>
+      <input type="number" id="lamaCicilan" placeholder="Contoh: 10" />
+
+      <label for="dp">DP (boleh tanpa DP):</label>
+      <input
+        type="text"
+        id="dp"
+        class="format-rupiah"
+        placeholder="Contoh: 1.000.000"
+      />
+
+      <button onclick="hitungCicilan()" class="btn-primary">
+        HITUNG CICILAN
+      </button>
+
+      <div id="hasilCicilan"></div>
+    </div>
+
+    <script>
+      console.log("Script Simulasi jalan...");
+
+      // === 1. Format angka ribuan saat diketik ===
+      document.querySelectorAll(".format-rupiah").forEach((input) => {
+        input.addEventListener("input", function () {
+          let angka = this.value.replace(/[^0-9]/g, "");
+          this.value = formatAngka(angka);
+        });
+      });
+
+      function formatAngka(angka) {
+        return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      // === 2. Ambil nilai asli untuk perhitungan ===
+      function getAngka(id) {
+        const val = document.getElementById(id).value;
+        return parseFloat(val.replace(/\./g, "")) || 0;
+      }
+
+      // === 3. Hitung Cicilan (Logika Asli Kamu) ===
+      function pembulatanRibuan(nilai) {
+        return Math.floor(nilai / 1000) * 1000;
+      }
+
+      function hitungCicilan() {
+        const harga = getAngka("hargaBarang");
+        const lama = parseInt(document.getElementById("lamaCicilan").value);
+        const dp = getAngka("dp");
+        const hasil = document.getElementById("hasilCicilan");
+
+        if (isNaN(harga) || isNaN(lama) || harga === 0) {
+          alert("Harap isi Harga dan Lama Cicilan.");
+          return;
+        }
+
+        if (lama > 12) {
+          hasil.style.display = "block";
+          hasil.innerHTML =
+            "<h3 style='color:red; text-align:center;'>Maaf, lebih 12 bulan hubungi Admin.</h3>";
+          return;
+        }
+
+        // Rumus sesuai permintaan
+        const hargaSetelahDP = harga - dp;
+        const faktor = lama <= 5 ? 1.1 : 1 + lama * 0.02;
+        const hargaJualSementara = hargaSetelahDP * faktor;
+        const cicilanAwal = hargaJualSementara / lama;
+        const cicilanFinal = pembulatanRibuan(cicilanAwal);
+        const hargaJualFinal = cicilanFinal * lama;
+
+        const tanggalSekarang = new Date();
+        // Mengikuti logika kamu: lama + 1 bulan ke depan
+        tanggalSekarang.setMonth(tanggalSekarang.getMonth() + (lama + 1));
+        const opsiTanggal = { month: "long", year: "numeric" };
+        const batasAkhir = tanggalSekarang.toLocaleDateString(
+          "id-ID",
+          opsiTanggal,
+        );
+
+        // Tampilkan Hasil dengan Style yang rapi
+        hasil.style.display = "block";
+        hasil.innerHTML = `
+        <p style="margin: 5px 0;"><b>Harga Jual:</b> Rp ${hargaJualFinal.toLocaleString("id-ID")}</p>
+        <p style="margin: 5px 0;"><b>Cicilan Bulanan:</b> <span style="font-size: 1.2rem; color: var(--biru-utama); font-weight: bold;">Rp ${cicilanFinal.toLocaleString("id-ID")}</span></p>
+        <p style="margin: 5px 0;"><b>Batas Akhir Cicilan:</b> ${batasAkhir}</p>
+      `;
+      }
+    </script>
+  </body>
+</html>
