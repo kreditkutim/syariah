@@ -35,15 +35,16 @@
     </div>
 
     <script>
-      function loadPage(page, btn) {
-        // Mengganti isi iframe
-        document.getElementById("content-frame").src = page;
+      function loadPage(pageUrl, element) {
+    const frame = document.getElementById('content-frame');
+    
+    // Gunakan contentWindow.location.replace agar tidak menambah history
+    frame.contentWindow.location.replace(pageUrl);
 
-        // Mengatur tombol mana yang terlihat 'active' (warna putih)
-        const buttons = document.querySelectorAll(".navbar button");
-        buttons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-      }
+    // Update status tombol aktif
+    document.querySelectorAll('.navbar button').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+}
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
@@ -55,3 +56,4 @@
     </script>
   </body>
 </html>
+
