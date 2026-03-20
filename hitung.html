@@ -75,6 +75,7 @@
 
         if (lama > 12) {
           hasil.style.display = "block";
+          hasil.style.background = "transparent"; // Reset background jika error
           hasil.innerHTML =
             "<h3 style='color:red; text-align:center;'>Maaf, lebih 12 bulan hubungi Admin.</h3>";
           return;
@@ -97,14 +98,40 @@
           opsiTanggal,
         );
 
-        // Tampilkan Hasil dengan Style yang rapi
+        // Tampilkan Hasil dengan Style yang rapi dan KONTRAS
         hasil.style.display = "block";
+        hasil.style.background = "#28a745"; // Hijau Syariah
+        hasil.style.padding = "15px";
+        hasil.style.borderRadius = "10px";
+        hasil.style.marginTop = "20px";
+        hasil.style.border = "2px solid #ffffff";
+        hasil.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
+
+        // Kita paksa warna putih di setiap baris pakai inline style color: #fff !important
         hasil.innerHTML = `
-        <p style="margin: 5px 0;"><b>Harga Jual:</b> Rp ${hargaJualFinal.toLocaleString("id-ID")}</p>
-        <p style="margin: 5px 0;"><b>Cicilan Bulanan:</b> <span style="font-size: 1.2rem; color: var(--biru-utama); font-weight: bold;">Rp ${cicilanFinal.toLocaleString("id-ID")}</span></p>
-        <p style="margin: 5px 0;"><b>Batas Akhir Cicilan:</b> ${batasAkhir}</p>
-      `;
-      }
+      <h3 style="text-align:center; color: #ffffff !important; border-bottom: 1px solid #fff; padding-bottom: 10px; margin-bottom: 15px; margin-top:0;">HASIL SIMULASI</h3>
+      
+      <p style="margin: 10px 0; color: #ffffff !important; font-size: 1rem;">
+        <b style="color: #ffffff !important;">Harga Jual Total:</b><br> 
+        <span style="color: #ffffff !important; font-size: 1.1rem;">Rp ${hargaJualFinal.toLocaleString("id-ID")}</span>
+      </p>
+      
+      <p style="margin: 15px 0; color: #ffffff !important; font-size: 1rem;">
+        <b style="color: #ffffff !important;">Cicilan Bulanan:</b><br>
+        <span style="font-size: 1.8rem; color: #ffeb3b !important; font-weight: bold; text-shadow: 2px 2px 3px #000;">
+          Rp ${cicilanFinal.toLocaleString("id-ID")}
+        </span>
+      </p>
+      
+      <p style="margin: 10px 0; color: #ffffff !important; font-size: 0.9rem; font-style: italic;">
+         <b style="color: #ffffff !important;">Lunas Pada:</b> ${batasAkhir}
+      </p>
+      
+      <p style="font-size: 0.75rem; margin-top: 15px; text-align:center; color: #ffffff !important; opacity: 0.9;">
+        *Pembulatan ribuan ke bawah
+      </p>
+    `;
+      } // <--- KURUNG PENUTUP FUNGSI INI TADI YANG HILANG BRO
     </script>
   </body>
 </html>
