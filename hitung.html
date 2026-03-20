@@ -107,28 +107,27 @@
         hasil.style.border = "2px solid #ffffff";
         hasil.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
 
-        // Kita paksa warna putih di setiap baris pakai inline style color: #fff !important
+       // Kita paksa warna putih di setiap baris pakai inline style color: #fff !important
         hasil.innerHTML = `
-      <h3 style="text-align:center; color: #ffffff !important; border-bottom: 1px solid #fff; padding-bottom: 10px; margin-bottom: 15px; margin-top:0;">HASIL SIMULASI</h3>
+      <h4 style="text-align:center; color: #fff !important; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 5px; margin: 0 0 10px 0; font-size: 0.95rem; letter-spacing: 1px;">HASIL SIMULASI KSS</h4>
       
-      <p style="margin: 10px 0; color: #ffffff !important; font-size: 1rem;">
-        <b style="color: #ffffff !important;">Harga Jual:</b><br> 
-        <span style="font-size: 1.8rem; color: #ffeb3b !important; font-weight: bold; text-shadow: 2px 2px 3px #000;">Rp ${hargaJualFinal.toLocaleString("id-ID")}</span>
+      <p style="margin: 0 0 5px 0; color: #fff !important; font-size: 0.85rem; line-height: 1.2;">
+        <b>Harga Jual Total:</b><br>
+        <p style="margin: 2px 0 0 0; font-size: 1.8rem; color: #ffeb3b !important; font-weight: bold; text-shadow: 2px 2px 3px #000;">Rp ${hargaJualFinal.toLocaleString("id-ID")}</span>
       </p>
-      
-      <p style="margin: 15px 0; color: #ffffff !important; font-size: 1rem;">
-        <b style="color: #ffffff !important;">Cicilan Bulanan:</b><br>
-        <span style="font-size: 1.8rem; color: #ffeb3b !important; font-weight: bold; text-shadow: 2px 2px 3px #000;">
-          Rp ${cicilanFinal.toLocaleString("id-ID")}
-        </span>
+            <div style="text-align: center; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.4);">
+          <p style="margin: 0; color: #fff !important; font-size: 0.8rem; font-weight: bold;">ANGSURAN PER BULAN:</p>
+          <p style="margin: 2px 0 0 0; font-size: 1.8rem; color: #ffeb3b !important; font-weight: bold; text-shadow: 2px 2px 3px #000;">
+            Rp ${cicilanFinal.toLocaleString("id-ID")}
+          </p>
+          <p style="margin: 0 0 10px 0; color: #fff !important; font-size: 0.85rem; line-height: 1.2;">
+        <b>Lunas Pada:</b><br>
+        <span style="font-size: 1rem;">${batasAkhir}</span>
       </p>
+      </div>
       
-      <p style="margin: 10px 0; color: #ffffff !important; font-size: 0.9rem; font-style: italic;">
-         <b style="color: #ffffff !important;">Lunas Pada:</b> ${batasAkhir}
-      </p>
-      
-      <p style="font-size: 0.75rem; margin-top: 15px; text-align:center; color: #ffffff !important; opacity: 0.9;">
-        *Pembulatan ribuan ke bawah
+      <p style="font-size: 0.65rem; margin-top: 8px; text-align:center; color: #fff !important; opacity: 0.8; font-style: italic; line-height: 1;">
+        *Estimasi pembulatan ribuan ke bawah
       </p>
     `;
       } // <--- KURUNG PENUTUP FUNGSI INI TADI YANG HILANG BRO
