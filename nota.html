@@ -122,41 +122,42 @@
         const sisaBayar = harga - totalBayar;
         const lunas = totalBayar >= harga && harga > 0;
 
-        // 4. Update Tampilan Detail
+        // 4. Update Tampilan Detail Konsumen
         document.getElementById("detailKonsumen").innerHTML = `
-      <div><strong>Kode:</strong> ${data.kode || "-"}</div>
-      <div><strong>Nama:</strong> ${data.nama || "-"}</div>
-      <div><strong>Barang:</strong> ${data.barang || "-"}</div>
-      <div><strong>Harga:</strong> ${harga ? formatRupiah(harga) : "-"}</div>
-      <div><strong>Cicilan/Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : "-"}</div>
-      <div><strong>Lamanya:</strong> ${data.lamaBulan || "-"} Bulan</div>
-      <div><strong>Estimasi Selesai:</strong> <span style="color: #2980b9; font-weight:bold;">${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</span></div>
-      <div><strong>Total Bayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : "-"}</div>
-      <div><strong>Kekurangan:</strong> <span style="color: #c0392b; font-weight:bold;">${formatRupiah(sisaBayar)}</span></div>
-      <div><strong>Status:</strong> <span style="color: ${lunas ? "green" : "red"}; font-weight: bold;">${lunas ? "LUNAS" : "BELUM LUNAS"}</span></div>
-    `;
+          <div><strong>Kode:</strong> ${data.kode || "-"}</div>
+          <div><strong>Nama:</strong> ${data.nama || "-"}</div>
+          <div><strong>Barang:</strong> ${data.barang || "-"}</div>
+          <div><strong>Harga:</strong> ${harga ? formatRupiah(harga) : "-"}</div>
+          <div><strong>Cicilan/Bulan:</strong> ${cicilanPerBulan ? formatRupiah(cicilanPerBulan) : "-"}</div>
+          <div><strong>Lamanya:</strong> ${data.lamaBulan || "-"} Bulan</div>
+          <div><strong>Estimasi Selesai:</strong> <span style="color: #2980b9; font-weight:bold;">${hitungCicilanTerakhirBulan(data.tanggalMulai, data.lamaBulan)}</span></div>
+          <div><strong>Total Bayar:</strong> ${totalBayar ? formatRupiah(totalBayar) : "-"}</div>
+          <div><strong>Kekurangan:</strong> <span style="color: #c0392b; font-weight:bold;">${formatRupiah(sisaBayar)}</span></div>
+          <div><strong>Status:</strong> <span style="color: ${lunas ? "green" : "red"}; font-weight: bold;">${lunas ? "LUNAS" : "BELUM LUNAS"}</span></div>
+        `;
 
-        // 5. Update Tabel Riwayat dengan Nomor Urut
+        // 5. Tabel Riwayat (Hanya No, Tanggal, Nominal)
         const riwayatDiv = document.getElementById("riwayatCicilan");
         if (data.cicilan && data.cicilan.length > 0) {
           let tabelHtml = `<table>
             <thead>
                 <tr>
-                    <th style="width: 40px; text-align: center;">No</th>
+                    <th style="width: 50px; text-align: center;">No</th>
                     <th>Tanggal</th>
-                    <th>Nominal</th>
+                    <th style="text-align: right;">Nominal</th>
                 </tr>
             </thead>
             <tbody>`;
 
-          // Perhatikan bagian index ini, Bro
           data.cicilan.forEach((c, index) => {
             const nominal = toNumber(c.nominal);
             tabelHtml += `
                 <tr>
-                    <td style="text-align: center; font-weight: bold;">${index + 1}</td>
+                    <td style="text-align: center; color: #666; font-weight: bold;">${index + 1}</td>
                     <td>${c.tanggal || "-"}</td>
-                    <td>${nominal ? formatRupiah(nominal) : "-"}</td>
+                    <td style="text-align: right; font-weight: bold; color: #2c3e50;">
+                        ${nominal ? formatRupiah(nominal) : "-"}
+                    </td>
                 </tr>`;
           });
 
@@ -164,7 +165,7 @@
           riwayatDiv.innerHTML = tabelHtml;
         } else {
           riwayatDiv.innerHTML =
-            "<p style='padding:10px;'>Belum ada riwayat pembayaran</p>";
+            "<p style='padding:15px; text-align:center; color: #999;'>Belum ada riwayat pembayaran</p>";
         }
 
         // Munculkan hasil
