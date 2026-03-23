@@ -56,7 +56,7 @@ body {
 .navbar {
   display: flex;
   background: rgba(0, 0, 0, 0.2);
-  padding: 12px;
+  padding: 12px 12px 18px 12px; /* Tambah padding bawah sedikit buat ruang scrollbar */
   gap: 10px;
 
   /* PENGATURAN GESER UTAMA */
@@ -65,12 +65,24 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
   width: 100%;
-  -webkit-overflow-scrolling: touch; /* Halus di iPhone */
+  -webkit-overflow-scrolling: touch;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* KITA TAMPILKAN LAGI TAPI VERSI KEREN/TIPIS */
 .navbar::-webkit-scrollbar {
-  display: none; /* Sembunyikan scrollbar */
+  display: block; /* Munculkan lagi */
+  height: 3px; /* Buat sangat tipis biar gak ganggu */
+}
+
+.navbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05); /* Jalur scroll yang samar */
+  border-radius: 10px;
+}
+
+.navbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4); /* Warna geserannya putih transparan */
+  border-radius: 10px;
 }
 
 .navbar button {
