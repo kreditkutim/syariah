@@ -3,89 +3,268 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pertanyaan Umum - KSS</title>
+    <title>Syarat & Ketentuan - KSS</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .syarat-container {
+        max-width: 100%; /* Biar mentok kiri kanan di HP */
+        margin: 10px auto;
+        padding: 0 5px; /* Jarak luar sangat tipis biar gak sempit */
+      }
+
+      .syarat-item {
+        background: #fff;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #3498db;
+      }
+
+      .syarat-header {
+        padding: 12px 15px; /* Padding header lebih rapat */
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .nomor-bulat {
+        background: #3498db;
+        color: white;
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .judul-syarat {
+        font-weight: bold;
+        font-size: 1.15rem; /* Judul lebih besar */
+        color: #2c3e50;
+      }
+
+      .syarat-body {
+        padding: 10px 15px 15px 15px; /* Padding kiri dikurangi agar teks melebar */
+        color: #333; /* Warna teks lebih hitam biar jelas */
+        line-height: 1.5;
+        font-size: 1.1rem; /* Ukuran tulisan naik satu tingkat */
+      }
+
+      .syarat-body ul {
+        margin: 0;
+        padding-left: 20px; /* Jarak bullet point standar */
+      }
+
+      .syarat-body li {
+        margin-bottom: 10px;
+      }
+
+      /* Desain khusus halaman Syarat */
+      .syarat-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 15px;
+      }
+
+      .syarat-item {
+        background: #fff;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid #3498db; /* Aksen garis biru di samping */
+        overflow: hidden;
+      }
+
+      .syarat-header {
+        padding: 15px 20px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .nomor-bulat {
+        background: #3498db;
+        color: white;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .judul-syarat {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #2c3e50;
+      }
+
+      .syarat-body {
+        padding: 15px 20px 20px 65px; /* Geser teks agar sejajar di bawah judul */
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .syarat-body ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .syarat-body li {
+        margin-bottom: 8px;
+      }
+
+      .info-penting {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
     <div class="card">
       <div class="header-title">
-        <h1>Pertanyaan Umum (FAQ)</h1>
+        <h1>Syarat & Ketentuan</h1>
+        <p>Mohon dibaca dan dipahami sebelum mengajukan kredit</p>
       </div>
 
-      <div class="content">
-        <div class="syarat-list">
-          <div class="syarat-item">
-            <div class="syarat-number">?</div>
-            <div class="syarat-body">
-              <h3>Apakah KSS sesuai Syariah?</h3>
-              <p>
-                Kami mengacu kepada fatwa DSN MUI tentang Murabahah. KSS tidak
-                meminjamkan uang, melainkan membeli barang lalu menjualnya
-                secara kredit dengan margin keuntungan yang disepakati.
-              </p>
-            </div>
-          </div>
+      <div class="syarat-container">
+        <div class="info-penting">
+          ⚠️ Seluruh transaksi di KSS berbasis kepercayaan dan kekeluargaan.
+        </div>
 
-          <div class="syarat-item">
-            <div class="syarat-number">?</div>
-            <div class="syarat-body">
-              <h3>Apa bedanya dengan sistem bunga?</h3>
-              <ul>
-                <li>Bebas dari sistem Bunga (Riba).</li>
-                <li>Tanpa denda keterlambatan (biaya tetap).</li>
-                <li>Harga jual sudah <b>Fixed (Tetap)</b> sejak awal akad.</li>
-                <li>Persyaratan lebih mudah & kekeluargaan.</li>
-              </ul>
-            </div>
+        <div class="syarat-item">
+          <div class="syarat-header">
+            <div class="nomor-bulat">1</div>
+            <div class="judul-syarat">Prinsip Amanah</div>
           </div>
-
-          <div class="syarat-item">
-            <div class="syarat-number">?</div>
-            <div class="syarat-body">
-              <h3>Apa itu Akad Murabahah?</h3>
-              <p>
-                Murabahah adalah transaksi jual beli di mana penjual menyebutkan
-                harga modal dan margin keuntungan kepada pembeli secara
-                terbuka/transparan.
-              </p>
-            </div>
+          <div class="syarat-body">
+            <ul>
+              <li>
+                Menjunjung tinggi kejujuran dan komitmen dalam bertransaksi.
+              </li>
+              <li>Menepati janji bayar tepat waktu sesuai kesepakatan.</li>
+              <li>
+                Mengutamakan cicilan kredit di atas kebutuhan non-primer
+                lainnya.
+              </li>
+              <li>Besaran pembayaran sesuai dengan perhitungan awal akad.</li>
+            </ul>
           </div>
+        </div>
 
-          <div class="syarat-item">
-            <div class="syarat-number">?</div>
-            <div class="syarat-body">
-              <h3>Berapa besaran uang muka (DP)?</h3>
-              <p>
-                Kami tidak mewajibkan uang muka secara mutlak (DP 0%). Namun,
-                membayar DP akan sangat meringankan jumlah cicilan bulanan Anda.
-              </p>
-            </div>
+        <div class="syarat-item">
+          <div class="syarat-header">
+            <div class="nomor-bulat">2</div>
+            <div class="judul-syarat">Sistem Referensi (Kenalan)</div>
           </div>
-
-          <div class="syarat-item">
-            <div class="syarat-number">?</div>
-            <div class="syarat-body">
-              <h3>Bagaimana cara cek angsuran saya?</h3>
-              <p>
-                Dapatkan 8 digit kode pribadi dari Admin KSS, lalu buka menu
-                <b>Nota</b> pada aplikasi ini dan masukkan kode tersebut.
-              </p>
-            </div>
+          <div class="syarat-body">
+            <ul>
+              <li>KSS mengutamakan keamanan transaksi berbasis kepercayaan.</li>
+              <li>Diutamakan bagi calon konsumen yang sudah dikenal admin.</li>
+              <li>
+                Wajib memiliki referensi/rekomendasi dari orang yang sudah
+                dikenal KSS jika belum dikenal admin.
+              </li>
+              <li>
+                Bagi yang benar-benar baru, silakan perkenalkan diri secara
+                mendalam kepada Admin.
+              </li>
+            </ul>
           </div>
+        </div>
 
-          <div class="syarat-item">
-            <div class="syarat-number">!</div>
-            <div class="syarat-body">
-              <h3>Barang apa saja yang bisa dikredit?</h3>
-              <p>
-                Elektronik, Gadget, Perabotan, dan Alat Kerja (min. harga 1
-                juta).
-              </p>
-              <div class="kesimpulan-box">
-                <strong>Penting:</strong> Kami tidak melayani pinjaman uang
-                tunai dan perhiasan emas.
-              </div>
-            </div>
+        <div class="syarat-item">
+          <div class="syarat-header">
+            <div class="nomor-bulat">3</div>
+            <div class="judul-syarat">Komunikasi via WhatsApp</div>
+          </div>
+          <div class="syarat-body">
+            <ul>
+              <li>
+                Seluruh proses administrasi dan penagihan dilakukan secara
+                digital.
+              </li>
+              <li>Wajib memiliki nomor WhatsApp yang selalu aktif.</li>
+              <li>Wajib menyimpan nomor kontak resmi Admin KSS.</li>
+              <li>
+                Jika di area susah sinyal, wajib menyertakan nomor darurat
+                keluarga terdekat.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="syarat-item">
+          <div class="syarat-header">
+            <div class="nomor-bulat">4</div>
+            <div class="judul-syarat">Grup Monitoring WhatsApp</div>
+          </div>
+          <div class="syarat-body">
+            <p>
+              Setiap transaksi akan dibuatkan grup khusus (2 orang: Pemohon &
+              Admin KSS):
+            </p>
+            <ul>
+              <li>Sebagai media pencatatan bukti bayar yang transparan.</li>
+              <li>
+                Grup akan dihapus otomatis oleh Admin setelah status angsuran
+                <b>Lunas</b>.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="syarat-item">
+          <div class="syarat-header">
+            <div class="nomor-bulat">5</div>
+            <div class="judul-syarat">Formulir Kesepakatan</div>
+          </div>
+          <div class="syarat-body">
+            <ul>
+              <li>
+                Wajib diisi oleh konsumen baru untuk kejelasan akad jual beli.
+              </li>
+              <li>
+                Konsumen lama yang sudah pernah transaksi tidak perlu mengisi
+                ulang.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="syarat-item" style="border-left-color: #e67e22">
+          <div class="syarat-header">
+            <div class="nomor-bulat" style="background: #e67e22">6</div>
+            <div class="judul-syarat">Proses Survei</div>
+          </div>
+          <div class="syarat-body">
+            <ul>
+              <li>
+                Verifikasi data lapangan dengan mengunjungi tempat tinggal
+                pemohon.
+              </li>
+              <li>
+                Melakukan sesi foto bersama tim KSS sebagai bentuk dokumentasi
+                silaturahmi dan bukti sah kunjungan lapangan.
+              </li>
+              <li>
+                <b>Bebas survei</b> bagi konsumen lama yang tidak pindah alamat.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
